@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "467322292669",
+    "firebase_url": "https://synergii-5dfe2.firebaseio.com",
+    "project_id": "synergii-5dfe2",
+    "storage_bucket": "synergii-5dfe2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467322292669:android:512d7b84cc19e578cd6ad4",
+        "android_client_info": {
+          "package_name": "com.example.synergii"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467322292669-4mcfoar9tgqebe53ngs2ir80osf8tvdl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAtv1jaDeqUZRjx6lllMgtm6z2HKDnToE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467322292669-4mcfoar9tgqebe53ngs2ir80osf8tvdl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

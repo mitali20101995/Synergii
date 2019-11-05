@@ -30,7 +30,7 @@
                 android:paddingBottom="20dp"
                 android:text="@string/Register_label"
                 android:textAlignment="center"
-                android:textColor="@color/colorDarkBlue"
+                android:textColor="@color/colorPrimary"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
@@ -56,10 +56,6 @@
                     android:maxLines="1"
                     android:singleLine="true" />
 
-
-
-
-
                 <EditText
                     android:id="@+id/email_txt"
                     android:layout_width="match_parent"
@@ -79,9 +75,6 @@
                     android:maxLines="1"
                     android:singleLine="true" />
 
-
-
-
                 <EditText
                     android:id="@+id/confirm_password_txt"
                     android:layout_width="match_parent"
@@ -91,7 +84,6 @@
                     android:maxLines="1"
                     android:singleLine="true" />
 
-
             <Button
                 android:id="@+id/btn_sign_up"
                 style="?android:textAppearanceSmall"
@@ -99,6 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:onClick="signUpClick"
+                android:background="@color/colorAccent"
+                android:textColor="@color/colorTextBtn"
                 android:text="@string/create_account"
                 android:textStyle="bold" />
 
@@ -108,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/have_account_lbl"
                 android:textAlignment="center"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorDarkGray" />
 
             <Button
                 android:id="@+id/log_in_btn_sign_up"
@@ -118,6 +112,8 @@
                 android:layout_marginTop="16dp"
                 android:onClick="moveToLogInScreen"
                 android:text="@string/log_in_btn"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorTextBtn"
                 android:textStyle="bold" />
         </LinearLayout>
     </ScrollView>

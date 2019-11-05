@@ -18,7 +18,7 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             //this method will be executed once timer is over
-            Intent i = new Intent(SplashActivity.this, MainActivity.class);
+            Intent i = new Intent(SplashActivity.this, LoginActivity.class);
             startActivity(i);
 
             //close this activity

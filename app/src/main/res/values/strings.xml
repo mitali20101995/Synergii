@@ -4,8 +4,8 @@
     <string name="log_in_btn">Login</string>
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
-    <string name="Register_label"> Register" </string>
-    <string name="agent_register_btn">Register</string>
+    <string name="Register_label"> Sign Up" </string>
+    <string name="agent_register_btn">Sign Up*</string>
 
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -15,8 +15,15 @@
     <string name="have_account_lbl">Already have an account?</string>
     <string name="create_account">Create Account</string>
 
+    //Firebase database nodes
+    <string name="dbnode_users">users</string>
 
-
+    //Firebase field nodes
+    <string name="field_users">users</string>
+    <string name="field_user_id">userId</string>
+    <string name="field_fname">firstName</string>
+    <string name="field_lname">lastName</string>
+    <string name="field_profile_image">profileImage</string>
 
 
 </resources>

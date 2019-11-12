@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                         Toast.makeText(LoginActivity.this, "Authenticated with: " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(LoginActivity.this, AgentHomeActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, WorkSpaceActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         finish();

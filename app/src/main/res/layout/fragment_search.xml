@@ -1,13 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SearchFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="54dp"
+        android:layout_height="50dp"
+        android:src="@drawable/brokerage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="57dp"
+        android:layout_height="47dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider7"
+        tools:src="@tools:sample/avatars[12]" />
+
+    <View
+        android:id="@+id/divider6"
+        android:layout_width="411dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+
+    <View
+        android:id="@+id/divider7"
+        android:layout_width="411dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+    <TextView
+        android:id="@+id/permClientLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Make Permanent"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/divider7" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Brokerage Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Client Info"
+        app:layout_constraintEnd_toStartOf="@+id/permClientLink"
+        app:layout_constraintHorizontal_bias="0.087"
+        app:layout_constraintStart_toEndOf="@+id/imageView10"
+        app:layout_constraintTop_toTopOf="@+id/divider7" />
+
+    <LinearLayout
+        android:layout_width="365dp"
+        android:layout_height="362dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider6">
+
+        <Spinner
+            android:id="@+id/filterSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/Filter" />
+
+        <Button
+            android:id="@+id/resetFilterBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_gravity="right"
+            android:background="@color/colorPrimary"
+            android:padding="5dp"
+            android:text="Reset Filter"
+            android:textColor="@color/colorTextBtn" />
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:queryHint="Search by MLS Number" />
+
+        <Spinner
+            android:id="@+id/areaSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/municipalitySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/lowerPriceSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Spinner
+            android:id="@+id/upperPriceSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/filterResultBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_gravity="right"
+            android:background="@color/colorPrimary"
+            android:padding="5dp"
+            android:text="Filter Result"
+            android:textColor="@color/colorTextBtn" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/agentSearchPropertiesList"
+            android:layout_width="match_parent"
+            android:layout_height="123dp"
+            android:layout_marginBottom="180dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

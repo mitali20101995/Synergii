@@ -1,14 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ChatFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+<TextView
+        android:id="@+id/clientInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Client Info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/clientProfilePic"
+        app:layout_constraintTop_toTopOf="@+id/divider1" />
+
+    <TextView
+        android:id="@+id/brokerageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Brokerage Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/brokerageLogo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/brokerageLogo"
+        android:layout_width="54dp"
+        android:layout_height="50dp"
+        android:src="@drawable/brokerage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="411dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brokerageLogo" />
+
+    <ImageView
+        android:id="@+id/clientProfilePic"
+        android:layout_width="57dp"
+        android:layout_height="47dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider1"
+        tools:src="@tools:sample/avatars[12]" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clientProfilePic" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2">
+
+        <TextView
+            android:id="@+id/tgl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:text="12 Oct 2019" />
+
+        <TextView
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:layout_below="@id/tgl"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@id/picture_chat"
+            android:background="@drawable/their_message"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:text="Hi, I am looking for a 3 Bedroom apartment.."
+
+            android:textColor="#000000" />
+
+        <ImageView
+            android:id="@+id/picture_chat"
+            android:layout_width="34dp"
+            android:layout_height="29dp"
+            android:layout_below="@id/tgl"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/ic_profile" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
+
+
+        <TextView
+            android:id="@+id/chat_2"
+            android:layout_width="180dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="35dp"
+            android:background="@drawable/my_message"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:text="Thank you for contacting our compnay.."
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/chat_2"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="16dp"
+            android:paddingLeft="10dp"
+            android:text="Seen"
+            android:textColor="#9B9B9B" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ems="10"
+            android:hint="Write a message"
+            android:inputType="text"
+            android:paddingHorizontal="10dp"
+            android:text="" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="10dp"
+            android:background="@drawable/ic_send"
+            android:padding="20dp"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/permClientLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make Permanent"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="@+id/divider2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.873"
+        app:layout_constraintStart_toEndOf="@+id/clientInfoTextView"
+        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

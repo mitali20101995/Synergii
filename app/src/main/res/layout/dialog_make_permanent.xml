@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:padding="15dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make Client Permanent"
+        android:textSize="21sp"
+        android:textColor="@color/colorPrimary"
+        android:id="@+id/dialogTitle"/>
+
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialogTitle"
+        android:hint="@string/username_hint"
+        android:id="@+id/make_permanent_email"
+        android:inputType="textEmailAddress"
+        android:layout_marginTop="15dp"
+        android:textSize="20sp"
+        android:textColor="@color/colorGray"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/make_permanent_email"
+        android:hint="@string/password_hint"
+        android:id="@+id/make_permanent_password"
+        android:inputType="textPassword"
+        android:layout_marginTop="15dp"
+        android:textSize="20sp"
+        android:textColor="@color/colorGray"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/colorAccent"
+        android:text="Confirm"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="30dp"
+        android:id="@+id/dialogConfirm"
+        android:layout_below="@+id/make_permanent_password"/>
+
+
+</RelativeLayout>

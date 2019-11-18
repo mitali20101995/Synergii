@@ -32,5 +32,27 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string-array name="Filter">
+        <item>Filter</item>
+        <item>Sale</item>
+        <item>Lease</item>
+    </string-array>
+
+    <string name="terms">Terms of Use</string>
+    <string name="terms1">      By using the features of SYNERGii and property listings provided on the platform, you are agreeing to the following terms of use.</string>
+    <string name="terms2"> You agree and acknowledge:</string>
+    <string name="terms3"> \t\t\t\t\t That this "Terms of Use" does not impose a financial obligation on you or create any representation agreement between you and this Virtual Office Website ("VOW"). All MLS© data obtained from this VOW is intended only for your personal, non-commercial use. You have a bona fide interest in the purchase, sale, or lease of real estate of the type being offered through this VOW. The information here is deemed reliable but not guaranteed by TREB.
+
+That you will not copy, redistribute, retransmit, or otherwise use any of the data or Listing Information provided, except in connection with your consideration of the purchase, sale, or lease of an individual property.
+
+Toronto Real Estate TERB ownership of and the validity of  proprietary rights and copyright in the MLS© database, MLS© data,  MLS© System, and Listing Information.
+
+You will not, directly or indirectly, display, post, disseminate, distribute, publish, broadcast, transfer, sell or sublicense any Listing Information to another individual or entity. The prohibited uses expressly include "scraping" (including "screen scraping" and "database scraping"), "data mining" or any other activity intended to collect, store, re-organize, summarize or manipulate any Listing Information or any related data.
+
+Having entered into a lawful broker-consumer relationship with. The Terms of Use agreement also expressly authorizes TREB, and other TREB Members or their duly authorized representatives, to access the VOW for the purposes of verifying compliance with MLS© Rules and Policies (including the VOW Rules) and monitoring the display of Members Listings by the VOW.
+
+Consent to the fact that your Personal Information, including first and last name, email address, and phone number may be collected, used or disclosed. The personal information may be shared with TREB for auditing and/or legal purposes.</string>
+
+
 
 </resources>

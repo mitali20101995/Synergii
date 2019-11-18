@@ -1,14 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PropertiesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/clientInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Client Info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/clientProfilePic"
+        app:layout_constraintTop_toTopOf="@+id/divider1" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/brokerageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Brokerage Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/brokerageLogo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/brokerageLogo"
+        android:layout_width="54dp"
+        android:layout_height="50dp"
+        android:src="@drawable/brokerage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="411dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brokerageLogo" />
+
+    <ImageView
+        android:id="@+id/clientProfilePic"
+        android:layout_width="57dp"
+        android:layout_height="47dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider1"
+        tools:src="@tools:sample/avatars[12]" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clientProfilePic" />
+
+    <TextView
+        android:id="@+id/permClientLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make Permanent"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/divider2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.873"
+        app:layout_constraintStart_toEndOf="@+id/clientInfoTextView"
+        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/agentMyPropertiesList"
+        android:layout_width="match_parent"
+        android:layout_height="307dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintVertical_bias="0.296" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,27 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<menu xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <item
+            android:id="@+id/nav_add_client"
+            android:onClick="onAddClientItemClick"
+            android:title="Add Client" />
+
+        <item
+            android:id="@+id/nav_admin_profile"
+            android:onClick="onProfileItemClick"
+            android:title="Profile" />
+
+        <item
+            android:id="@+id/nav_terms"
+            android:title="Terms and Conditions"
+            android:onClick="onTermsAndConditionsItemClick"/>
+        <item
+            android:id="@+id/nav_logout"
+            android:onClick="onLogoutItemClick"
+            android:title="Logout" />
+
+
+</menu>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PropertyDetailActivity">
+
+    <TextView
+        android:id="@+id/brokerageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Brokerage Name"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/brokerageLogo"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/brokerageLogo"
+        android:layout_width="54dp"
+        android:layout_height="50dp"
+        android:src="@android:drawable/ic_menu_gallery"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.044"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="411dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brokerageLogo" />
+
+    <ImageView
+        android:id="@+id/clientProfilePic"
+        android:layout_width="57dp"
+        android:layout_height="47dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider1"
+        tools:src="@tools:sample/avatars[12]" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clientProfilePic" />
+
+    <TextView
+        android:id="@+id/clientInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Client Info"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/clientProfilePic"
+        app:layout_constraintTop_toTopOf="@+id/divider1" />
+
+    <ScrollView
+        android:layout_width="356dp"
+        android:layout_height="377dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.567"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintVertical_bias="0.505">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/pager"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true" />
+
+<!--                <app.viewpagerindicator.CirclePageIndicator-->
+<!--                    android:id="@+id/indicator"-->
+<!--                    android:layout_width="fill_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentBottom="true"-->
+<!--                    android:layout_centerHorizontal="true"-->
+<!--                    android:gravity="bottom"-->
+<!--                    android:padding="10dip"-->
+<!--                    app:centered="true"-->
+<!--                    app:fillColor="#df0623"-->
+<!--                    app:pageColor="#fff"-->
+<!--                    app:snap="false" />-->
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/propertyDetailsTextView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="30"
+                android:text="4088 ELLESMERE RD Toronto, Ontario M1C1J2 MLS® Number: E4562311"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/propertyDetailsTextView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="30"
+                android:text="Property Description"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:id="@+id/propertyDetailsTextView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="30"
+                android:text="Price:$2960         Bedrooms:6\nBathrooms:2       Style:Detached"
+                android:textColor="@android:color/black" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:ems="10"
+                    android:hint="Type a message"
+                    android:inputType="text"
+                    android:paddingHorizontal="10dp"
+                    android:text="" />
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/ic_send"
+                    android:padding="20dp"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

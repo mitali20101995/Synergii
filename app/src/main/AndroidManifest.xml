@@ -12,7 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".TermsAndConditionsActivity"></activity>
+        <activity android:name=".PasswordResetDialogActivity"></activity>
+        <activity android:name=".AgentProfileActivity" />
+        <activity android:name=".AddClientActivity" />
+        <activity android:name=".TermsAndConditionsActivity" />
         <activity android:name=".PropertyDetailActivity" />
         <activity android:name=".WorkSpaceActivity" />
         <activity android:name=".AgentHomeActivity" />

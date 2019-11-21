@@ -17,16 +17,25 @@
 
     //Firebase database nodes
     <string name="dbnode_users">users</string>
+    <string name="dbnode_clients">clients</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="email">Email</string>
+    <string name="change_password">Change Password</string>
 
     //Firebase field nodes
     <string name="field_users">users</string>
     <string name="field_user_id">userId</string>
     <string name="field_fname">firstName</string>
     <string name="field_lname">lastName</string>
+    <string name="field_phone_number">phone</string>
+    <string name="field_title">title</string>
+    <string name="field_brokerage_name">brokerageName</string>
+    <string name="field_description">description</string>
     <string name="field_profile_image">profileImage</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
     <string name="title_activity_agent_home">AgentHomeActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -52,7 +61,6 @@ You will not, directly or indirectly, display, post, disseminate, distribute, pu
 Having entered into a lawful broker-consumer relationship with. The Terms of Use agreement also expressly authorizes TREB, and other TREB Members or their duly authorized representatives, to access the VOW for the purposes of verifying compliance with MLS© Rules and Policies (including the VOW Rules) and monitoring the display of Members Listings by the VOW.
 
 Consent to the fact that your Personal Information, including first and last name, email address, and phone number may be collected, used or disclosed. The personal information may be shared with TREB for auditing and/or legal purposes.</string>
-
 
 
 </resources>

@@ -11,16 +11,22 @@ public class User implements Parcelable {
     private String email;
     private String phone;
     private String password;
+    private String title;
+    private String brokerageName;
+    private String Description;
     private String profilePhoto;
 
     public User() {
     }
-    public User(String userId, String firstName, String lastName, String email, String phone, String password, String profilePhoto) {
+    public User(String userId, String firstName, String lastName, String email, String title, String brokerageName,String Description, String phone, String password, String profilePhoto) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
+        this.title = title;
+        this.Description = Description;
+        this.brokerageName = brokerageName;
         this.password = password;
         this.profilePhoto = profilePhoto;
     }
@@ -32,6 +38,9 @@ public class User implements Parcelable {
         email = in.readString();
         phone = in.readString();
         password = in.readString();
+        title = in.readString();
+        brokerageName = in.readString();
+        Description = in.readString();
         profilePhoto = in.readString();
     }
 
@@ -103,6 +112,18 @@ public class User implements Parcelable {
         this.userId = userId;
     }
 
+    public String  getBrokerageName() { return brokerageName;}
+
+    public void setBrokerageName(String brokerageName) {this.brokerageName = brokerageName;}
+
+    public String getTitle(){return title;}
+
+    public void setTitle(String title){this.title = title;}
+
+    public String getDescription(){return Description;}
+
+     public void setDescription(String Description){this.Description = Description;}
+
     @Override
     public int describeContents() {
         return 0;
@@ -116,6 +137,9 @@ public class User implements Parcelable {
         parcel.writeString(email);
         parcel.writeString(phone);
         parcel.writeString(password);
+        parcel.writeString(title);
+        parcel.writeString(Description);
+        parcel.writeString(brokerageName);
         parcel.writeString(profilePhoto);
     }
 
@@ -126,6 +150,9 @@ public class User implements Parcelable {
                 "lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
+                ", title='" + title + '\'' +
+                ", brokerageName='" + brokerageName + '\'' +
+                ", Description='" + Description + '\'' +
                 ", profilePhoto='" + profilePhoto + '\'' +
                 ", user_id='" + userId + '\'' +
                 '}';

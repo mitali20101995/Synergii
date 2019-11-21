@@ -48,7 +48,7 @@
         app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider2"
-        tools:src="@drawable/agent" />
+        android:src="@drawable/agent" />
 
     <View
         android:id="@+id/divider1"

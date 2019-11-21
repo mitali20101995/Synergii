@@ -47,12 +47,12 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
     }
 
     public void onAddClientItemClick(MenuItem item) {
-        Intent startIntent = new Intent(getApplicationContext(), AgentHomeActivity.class);
+        Intent startIntent = new Intent(getApplicationContext(), AddClientActivity.class);
         startActivity(startIntent);
     }
 
     public void onProfileItemClick(MenuItem item) {
-        Intent startIntent = new Intent(getApplicationContext(), TermsAndConditionsActivity.class);
+        Intent startIntent = new Intent(getApplicationContext(), AgentProfileActivity.class);
         startActivity(startIntent);
     }
 

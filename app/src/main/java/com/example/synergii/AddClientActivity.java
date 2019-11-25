@@ -28,6 +28,7 @@ public class AddClientActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     // widgets
     private EditText mEmail, mFName, mLName, mListingId;
+    //private String mClientId;
     private ProgressBar mProgressBar;
     public static boolean isActivityRunning;
     private DatabaseReference mDatabase;
@@ -55,7 +56,8 @@ public class AddClientActivity extends AppCompatActivity {
             post.setLastName(mLName.getText().toString());
             post.setEmail(mEmail.getText().toString());
             post.setListingId(mListingId.getText().toString());
-
+            post.setAssignedAgent(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            //post.setClientId(mDatabase.child("clients").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).toString());
             addPost(post, view);
         });
     }

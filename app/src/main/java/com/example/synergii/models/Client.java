@@ -11,7 +11,7 @@ public class Client implements Parcelable {
 
     private String clientId;
     private Listing[] properties;
-    private Agent assignedAgent;
+    private String assignedAgent;
     private String[] notifications;
     private String firstName;
     private String lastName;
@@ -69,7 +69,7 @@ public class Client implements Parcelable {
         this.email = email;
     }
 
-    public Client(String clientId, Listing[] properties, Agent assignedAgent, String firstName,String listingId,  String lastName, String email, String[] notifications) {
+    public Client(String clientId, Listing[] properties, String assignedAgent, String firstName,String listingId,  String lastName, String email, String[] notifications) {
         this.clientId = clientId;
         this.properties = properties;
         this.assignedAgent = assignedAgent;
@@ -99,11 +99,11 @@ public class Client implements Parcelable {
         this.properties = properties;
     }
 
-    public Agent getAssignedAgent() {
+    public String getAssignedAgent() {
         return assignedAgent;
     }
 
-    public void setAssignedAgent(Agent assignedAgent) {
+    public void setAssignedAgent(String assignedAgent) {
         this.assignedAgent = assignedAgent;
     }
 
@@ -149,7 +149,7 @@ public class Client implements Parcelable {
         dest.writeString(lastName);
         dest.writeString(email);
         dest.writeString(clientId);
-        dest.writeParcelable((Parcelable) assignedAgent,flags);
+        dest.writeString(assignedAgent);
 
     }
 

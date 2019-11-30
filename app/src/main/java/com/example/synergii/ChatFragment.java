@@ -23,14 +23,14 @@ View v;
         v = inflater.inflate(R.layout.fragment_chat, container, false);
         super.onCreate(savedInstanceState);
 
-        TextView permClientLink = (TextView) v.findViewById(R.id.permClientLink);
-        permClientLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MakePermanentDialog dialog = new MakePermanentDialog();
-                dialog.show(getFragmentManager(), "dialog_password_reset");
-            }
-        });
+//        TextView permClientLink = (TextView) v.findViewById(R.id.permClientLink);
+//        permClientLink.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MakePermanentDialog dialog = new MakePermanentDialog();
+//                dialog.show(getFragmentManager(), "dialog_password_reset");
+//            }
+//        });
         return v;
     }
 

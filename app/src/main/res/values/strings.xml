@@ -5,7 +5,7 @@
     <string name="username_hint">Username</string>
     <string name="password_hint">Password</string>
     <string name="Register_label"> Sign Up" </string>
-    <string name="agent_register_btn">Sign Up*</string>
+    <string name="agent_register_btn">Sign Up</string>
 
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -35,11 +35,21 @@
     <string name="field_profile_image">profileImage</string>
 
 
-
     <string name="title_activity_agent_home">AgentHomeActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    //agent at client page
+    <string name="agent_Name">Agent Name</string>
+    <string name="agent_Title">Agent Title</string>
+    <string name="agentDesc"> \t\t\t\t\t We, Industria, aims to help your business succeed by advising, finding and negotiating the right property for your business. We believe we can transform your businesses by advising you when to buy your unit and when to lease. In which part of the GTA your should be located. Which builders you should work with and which you should avoid. And more.</string>
+    <string name="agent_company"> Brokerage Detail </string>
+    <string name="agent_company_name">Xoocca, Brokerage </string>
+    <string name="company_title">Broker of Record</string>
+
 
     <string-array name="Filter">
         <item>Filter</item>
@@ -61,6 +71,7 @@ You will not, directly or indirectly, display, post, disseminate, distribute, pu
 Having entered into a lawful broker-consumer relationship with. The Terms of Use agreement also expressly authorizes TREB, and other TREB Members or their duly authorized representatives, to access the VOW for the purposes of verifying compliance with MLS© Rules and Policies (including the VOW Rules) and monitoring the display of Members Listings by the VOW.
 
 Consent to the fact that your Personal Information, including first and last name, email address, and phone number may be collected, used or disclosed. The personal information may be shared with TREB for auditing and/or legal purposes.</string>
+
 
 
 </resources>

@@ -16,12 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.example.synergii.Adapters.AgentSearchPropertiesRecyclerAdapter;
 
 public class SearchFragment extends Fragment implements AgentSearchPropertiesRecyclerAdapter.OnNoteListener, AdapterView.OnItemSelectedListener{
     View v;
+    LinearLayout collapseList;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
@@ -63,8 +67,38 @@ public class SearchFragment extends Fragment implements AgentSearchPropertiesRec
             String[] data = {"property1", "property2", "property3", "property4", "property5", "property6", "property7", "property8"};
             agentSearchPropertiesList.setAdapter(new AgentSearchPropertiesRecyclerAdapter(data, this));
 
-            return v;
-        }
+        collapseList = (LinearLayout) v.findViewById(R.id.collapseList);
+        collapseList.setVisibility(View.GONE);
+
+        Button resetFilterBtn = (Button) v.findViewById(R.id.resetFilterBtn);
+        resetFilterBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                toggle_contents(v);
+            }
+        });
+
+        Button filterResultBtn = (Button) v.findViewById(R.id.filterResultBtn);
+        filterResultBtn.setOnClickListener(new View.OnClickListener()
+        {
+
+            @Override
+            public void onClick(View v) {
+                collapseList.setVisibility(View.GONE);
+            }
+        });
+
+
+        return v;
+    }
+
+    public void toggle_contents(View v){
+        collapseList.setVisibility( collapseList.isShown()
+                ? View.GONE
+                : View.VISIBLE );
+    }
+
 
         @Override
         public void onItemSelected (AdapterView < ? > parent, View view,int position, long id){

@@ -90,23 +90,10 @@
                 android:layout_height="wrap_content" >
 
                 <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/pager"
+                    android:id="@+id/viewPager"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true" />
-
-<!--                <app.viewpagerindicator.CirclePageIndicator-->
-<!--                    android:id="@+id/indicator"-->
-<!--                    android:layout_width="fill_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_alignParentBottom="true"-->
-<!--                    android:layout_centerHorizontal="true"-->
-<!--                    android:gravity="bottom"-->
-<!--                    android:padding="10dip"-->
-<!--                    app:centered="true"-->
-<!--                    app:fillColor="#df0623"-->
-<!--                    app:pageColor="#fff"-->
-<!--                    app:snap="false" />-->
 
             </RelativeLayout>
 

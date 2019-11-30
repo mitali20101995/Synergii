@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,12 +23,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.text.TextUtils.isEmpty;
+
 public class AddClientActivity extends AppCompatActivity {
     private static final String TAG = "AddClientActivity";
     //Firebase
     private FirebaseAuth.AuthStateListener mAuthListener;
     // widgets
-    private EditText mEmail, mFName, mLName, mListingId;
+    private EditText mEmail, mFName, mLName, mListingId, mClientPassword;
     //private String mClientId;
     private ProgressBar mProgressBar;
     public static boolean isActivityRunning;
@@ -44,6 +47,7 @@ public class AddClientActivity extends AppCompatActivity {
         mFName = findViewById(R.id.FNameEditText);
         mLName = findViewById(R.id.LNameEditText);
         mListingId = findViewById(R.id.editTextListingId);
+        mClientPassword = findViewById(R.id.editTextClientPassword);
         mBtnAddClient = findViewById(R.id.addClientBtn);
 
         setOnCLickListener();
@@ -51,14 +55,24 @@ public class AddClientActivity extends AppCompatActivity {
     }
     private void setOnCLickListener() {
         mBtnAddClient.setOnClickListener(view -> {
-            Client post = new Client();
-            post.setFirstName(mFName.getText().toString());
-            post.setLastName(mLName.getText().toString());
-            post.setEmail(mEmail.getText().toString());
-            post.setListingId(mListingId.getText().toString());
-            post.setAssignedAgent(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            //post.setClientId(mDatabase.child("clients").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).toString());
-            addPost(post, view);
+
+            if(!isEmpty(mEmail.getText().toString())
+                    && !isEmpty(mFName.getText().toString()) && !isEmpty(mLName.getText().toString()) && !isEmpty(mListingId.getText().toString()) && !isEmpty(mClientPassword.getText().toString()))
+            {
+                Client post = new Client();
+                post.setFirstName(mFName.getText().toString());
+                post.setLastName(mLName.getText().toString());
+                post.setEmail(mEmail.getText().toString());
+                post.setListingId(mListingId.getText().toString());
+                post.setAssignedAgent(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                post.setClientPassword(mClientPassword.getText().toString());
+                //post.setClientId(mDatabase.child("clients").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).toString());
+                addPost(post, view);
+            }
+            else{
+                Toast.makeText(AddClientActivity.this, "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
+            }
+
         });
     }
 
@@ -70,7 +84,27 @@ public class AddClientActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(view.getContext(), "Client added", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(view.getContext(), "Client added and email sent.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(AddClientActivity.this,WorkSpaceActivity.class);
+
+                        String subject = "Synergii temporary Login Credentials ";
+                        String message = "You have been added as a client.\n" +
+                                "These are your login details:\n" +
+                                "Username: " + mEmail.getText().toString() +
+                                "\n Password:" + mClientPassword.getText().toString() +
+                                "\n Change password after first login.";
+
+
+                        Intent intent2 = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                                "mailto", "mEmail.getText().toString()", null));
+                        intent2.putExtra(Intent.EXTRA_SUBJECT, subject);
+                        intent2.putExtra(Intent.EXTRA_TEXT, message);
+                        //intent2.putExtra(Intent.EXTRA_EMAIL, mEmail.getText().toString());
+                        startActivity(intent2);
+                        finish();
+
+                        startActivity(intent);
+                        finish();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_chat_client"
+        android:icon="@drawable/ic_chat"
+        android:title="Chat"/>
+    <item
+        android:id="@+id/nav_properties_client"
+        android:icon="@drawable/ic_properties"
+        android:title="My Properties"/>
+    <item
+        android:id="@+id/nav_search_client"
+        android:icon="@drawable/ic_search"
+        android:title="Search"/>
+
+</menu>

@@ -124,8 +124,9 @@ public class AgentProfileActivity extends AppCompatActivity
         mSave.setOnClickListener(v -> {
             Log.d(TAG, "onClick: attempting to save settings.");
 
+
             //see if they changed the email
-//            if (!mEmail.getText().toString().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
+//            if (!mEmail.getText( ).toString().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
 //                //make sure email and current password fields are filled
 //                if (!isEmpty(mEmail.getText().toString())
 //                        && !isEmpty(mCurrentPassword.getText().toString())) {
@@ -198,7 +199,13 @@ public class AgentProfileActivity extends AppCompatActivity
                     sendResetPasswordLink();
                 }
             });
+            Toast.makeText(getApplicationContext(), "Profile updated", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(AgentProfileActivity.this,WorkSpaceActivity.class);
+            startActivity(intent);
+            finish();
         });
+
+
     }
     private void setCurrentEmail(){
         Log.d(TAG, "setCurrentEmail: setting current email to EditText field");
@@ -241,6 +248,7 @@ public class AgentProfileActivity extends AppCompatActivity
                     Log.d(TAG, "onDataChange: (QUERY METHOD 1) found user: "
                             + singleSnapshot.getValue(User.class).toString());
                     User user = singleSnapshot.getValue(User.class);
+
                     mFName.setText(user.getFirstName());
                     mLName.setText(user.getLastName());
                     mPhone.setText(user.getPhone());

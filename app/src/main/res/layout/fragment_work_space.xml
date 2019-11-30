@@ -67,14 +67,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/brokerageLogo" />
 
-    <SearchView
-        android:id="@+id/searchClient"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:queryHint="Search Client"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+<!--    <SearchView-->
+<!--        android:id="@+id/searchClient"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:queryHint="Search Client"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/divider1" />-->
 
     <TextView
         android:id="@+id/workspaceHeadTextView"
@@ -85,7 +85,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchClient" />
+        app:layout_constraintTop_toBottomOf="@+id/divider1" />
     <TextView
         android:id="@+id/subHeadTextView"
         android:layout_width="wrap_content"

@@ -23,7 +23,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:paddingLeft="10dp"
-            android:text="Property Details"
+            android:text=" Property 1\n 17 Jasmine Rd Toronto, Ontario M9M2P8"
+            android:textColor="@android:color/black"
             android:textSize="18sp" />
 
         <Button
@@ -33,7 +34,6 @@
             android:text="Add To Workspace" />
 
     </LinearLayout>
-
 
 
 </LinearLayout>

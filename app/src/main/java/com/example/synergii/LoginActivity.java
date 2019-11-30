@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.synergii.models.Client;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,6 +22,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -32,6 +39,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mEmail, mPassword;
     private ProgressBar mProgressBar;
     public static boolean isActivityRunning;
+    private DatabaseReference mDatabase;
+    private String email;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,64 @@ public class LoginActivity extends AppCompatActivity {
 
     public void moveToHome(View view)
     {
+      //For Clients
+//        if(!isEmpty(mEmail.getText().toString())
+//                && !isEmpty(mPassword.getText().toString()))
+//        {
+//            showDialog();
+//
+//            Query query = FirebaseDatabase.getInstance().getReference()
+//                    .child(getString(R.string.dbnode_clients))
+//                    .orderByChild("email")
+//                    .equalTo(mEmail.getText().toString());
+//            query.addValueEventListener(new ValueEventListener(){
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    Log.d(TAG, "onDataChange: " + dataSnapshot);
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError databaseError) {
+//                    Log.d("LoginActivity", "Database Error" + databaseError);
+//                }
+//            });
+
+            // Attach a listener to read the data at our posts reference
+//            reference.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    Log.d("LoginActivity","ondatachange");
+//                    Client client = dataSnapshot.getValue(Client.class);
+//                    email = client.getEmail();
+//                    password = client.getClientPassword();
+//
+//                    if(mEmail.getText().toString().equals(email) && mPassword.getText().toString().equals(password))
+//                    {
+//                        Intent intent = new Intent(LoginActivity.this, ClientHomeActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//
+//                    }
+//                    else
+//                    {
+//                        Toast.makeText(LoginActivity.this, "Client Authentication Failed", Toast.LENGTH_SHORT).show();
+//                        hideDialog();
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                    Log.d("LoginActivity","The read failed: " + databaseError);
+//                }
+//            });
+
+
+//        }
+//        else{
+//        Toast.makeText(LoginActivity.this, "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
+//        }
+
+        //For Agent Only
         if(!isEmpty(mEmail.getText().toString())
                 && !isEmpty(mPassword.getText().toString())){
             Log.d(TAG, "onClick: attempting to authenticate.");
@@ -75,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
         }else{
             Toast.makeText(LoginActivity.this, "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
         }
-    }
+   }
 
     public void moveToRegisterForm(View view)
     {
@@ -91,6 +159,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+
                 if (user != null) {
 
                     //check if email is verified
@@ -171,4 +240,12 @@ public class LoginActivity extends AppCompatActivity {
         isActivityRunning = false;
 
     }
+
+    public void moveToClient(View view)
+    {
+        Intent intent = new Intent(LoginActivity.this, ClientHomeActivity.class);
+                        startActivity(intent);
+                        finish();
+    }
+
 }

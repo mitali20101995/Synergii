@@ -155,7 +155,7 @@
                 android:ems="10"
                 android:hint="Email"
                 android:inputType="none"
-                android:textIsSelectable="true"
+                android:textIsSelectable="false"
                 android:textColor="@color/colorGray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

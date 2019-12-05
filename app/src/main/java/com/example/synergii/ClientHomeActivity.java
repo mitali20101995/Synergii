@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class ClientHomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -83,8 +84,8 @@ public class ClientHomeActivity extends AppCompatActivity implements NavigationV
                 break;
 
             case R.id.nav_logout:
-                Toast.makeText(this, "You Logged Out", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ClientHomeActivity.this, LoginActivity.class);
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
 
         }

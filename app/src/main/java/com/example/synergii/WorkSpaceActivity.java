@@ -33,7 +33,6 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
     public static final String TAG = "WorkSpaceActivity";
 
     private RecyclerView clientsList;
-    private ArrayList<String> data;
     private TextView bName ;
     private TextView aInfo;
 
@@ -51,21 +50,26 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
                 .orderByKey()
                 .equalTo(currentUID);
 
-        brokerage_query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                bName.setText(user.getBrokerageName());
-                aInfo.setText(user.getFirstName() +" " + user.getLastName());
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+           brokerage_query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-            }
-        });
+                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                        Log.d(TAG, "onDataChange: query method found user: "
+                                + singleSnapshot.getValue(User.class).toString());
+                        User user = singleSnapshot.getValue(User.class);
+                        bName.setText(user.getBrokerageName());
+                        aInfo.setText(user.getFirstName());
+
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) { }
+
+            });
     //Client list
-        data = new ArrayList<>();
+        //data = new ArrayList<>();
         clientsList = findViewById(R.id.recyclerViewHome);
         clientsList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -81,7 +85,6 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
                     Log.d(TAG, "onDataChange: query method found user: "
                             + singleSnapshot.getValue(Client.class).toString());
                     Client client= singleSnapshot.getValue(Client.class);
-                   // String name = client.getFirstName() +" "+ client.getLastName();
                     clients.add(client.getFirstName() + " " + client.getLastName());
                 }
                 clientsList.setAdapter(new RecyclerAdapter(clients,WorkSpaceActivity.this::onNoteClick));
@@ -94,8 +97,10 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
 
     @Override
     public void onNoteClick(int position) {
+
         Intent startIntent = new Intent(getApplicationContext(), AgentHomeActivity.class);
         startActivity(startIntent);
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

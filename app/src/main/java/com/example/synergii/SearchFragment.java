@@ -89,7 +89,6 @@ public class SearchFragment extends Fragment implements AgentSearchPropertiesRec
             }
         });
 
-
         return v;
     }
 

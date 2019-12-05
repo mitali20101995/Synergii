@@ -40,6 +40,7 @@ public class ClientProperties extends Fragment implements ClientMyPropertiesRecy
 
         Intent startIntent = new Intent(getContext(), PropertyDetails.class);
         startActivity(startIntent);
+
     }
 /*
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {

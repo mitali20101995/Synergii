@@ -15,9 +15,24 @@ public class Client implements Parcelable {
     private String[] notifications;
     private String firstName;
     private String lastName;
+    private String phone;
     private String clientPassword;
     private String email;
     private String listingId;
+
+    public Client(String clientId, Listing[] properties, String assignedAgent, String[] notifications, String firstName, String lastName, String phone, String clientPassword, String email, String listingId) {
+        this.clientId = clientId;
+        this.properties = properties;
+        this.assignedAgent = assignedAgent;
+        this.notifications = notifications;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.clientPassword = clientPassword;
+        this.email = email;
+        this.listingId = listingId;
+    }
+
 
     public String getClientPassword() {
         return clientPassword;
@@ -79,17 +94,14 @@ public class Client implements Parcelable {
         this.email = email;
     }
 
-    public Client(String clientId, Listing[] properties, String assignedAgent,String clientPassword,String firstName,String listingId,  String lastName, String email, String[] notifications) {
-        this.clientId = clientId;
-        this.properties = properties;
-        this.assignedAgent = assignedAgent;
-        this.notifications = notifications;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.clientPassword = clientPassword;
-        this.listingId = listingId;
+    public String getPhone() {
+        return phone;
     }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
 
     public Client() {
     }
@@ -135,6 +147,7 @@ public class Client implements Parcelable {
                 ", notifications=" + Arrays.toString(notifications) +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
                 ", clientPassword='" + clientPassword + '\'' +
                 ", email='" + email + '\'' +
                 '}';
@@ -147,8 +160,8 @@ public class Client implements Parcelable {
         email = in.readString();
         listingId = in.readString();
         clientPassword = in.readString();
+        phone = in.readString();
         assignedAgent = in.readParcelable(Client.class.getClassLoader());
-
     }
 
     @Override
@@ -163,6 +176,7 @@ public class Client implements Parcelable {
         dest.writeString(email);
         dest.writeString(clientId);
         dest.writeString(assignedAgent);
+        dest.writeString(phone);
         dest.writeString(clientPassword);
     }
 
@@ -172,6 +186,7 @@ public class Client implements Parcelable {
         result.put("firstName",firstName);
         result.put("lastName",lastName);
         result.put("email",email);
+        result.put("phone",phone);
         result.put("assignedAgent",assignedAgent);
         result.put("clientPassword", clientPassword);
         result.put("listingId",listingId);

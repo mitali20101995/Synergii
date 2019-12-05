@@ -48,7 +48,7 @@ public class AgentProfileActivity extends AppCompatActivity
     private static final int REQUEST_CODE = 1234;
     private static final String DOMAIN_NAME = "gmail.com";
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private EditText mEmail, mCurrentPassword, mFName, mLName;
+    private EditText mEmail, mFName, mLName, mCurrentPassword;
     private Button mSave;
     private TextView mPhone;
     private TextView mBrokerageName;
@@ -71,7 +71,6 @@ public class AgentProfileActivity extends AppCompatActivity
         setContentView(R.layout.activity_agent_profile);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mEmail = findViewById(R.id.editTextEmail);
-        //mCurrentPassword = findViewById(R.id.edit);
         mSave = findViewById(R.id.updateProfileBtn);
         mProgressBar = findViewById(R.id.progressBarProfile);
         mResetPasswordLink = findViewById(R.id.change_password);
@@ -84,7 +83,6 @@ public class AgentProfileActivity extends AppCompatActivity
         verifyStoragePermissions();
         setCurrentEmail();
         init();
-
 
         List<String> titles = new ArrayList<>();
         titles.add(0, "Choose Title");

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ClientProperties"></activity>
+        <activity android:name=".ClientProperties" />
         <activity android:name=".ClientSearchPropertiesRecyclerAdapterActivity" />
         <activity android:name=".ClientSearchProperties" />
         <activity android:name=".ClientHomeActivity" />

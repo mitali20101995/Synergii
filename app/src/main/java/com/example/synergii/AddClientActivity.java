@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +17,7 @@ import com.example.synergii.models.Client;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -24,11 +26,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
+import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
 public class AddClientActivity extends AppCompatActivity {
     private static final String TAG = "AddClientActivity";
     //Firebase
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseAuth mAuth;
     // widgets
     private EditText mEmail, mFName, mLName, mListingId, mClientPassword;
     //private String mClientId;
@@ -41,8 +45,8 @@ public class AddClientActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_client);
+        mAuth = getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
         mEmail = findViewById(R.id.emailEditText);
         mFName = findViewById(R.id.FNameEditText);
         mLName = findViewById(R.id.LNameEditText);
@@ -64,10 +68,31 @@ public class AddClientActivity extends AppCompatActivity {
                 post.setLastName(mLName.getText().toString());
                 post.setEmail(mEmail.getText().toString());
                 post.setListingId(mListingId.getText().toString());
-                post.setAssignedAgent(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                post.setAssignedAgent(getInstance().getCurrentUser().getUid());
                 post.setClientPassword(mClientPassword.getText().toString());
-                //post.setClientId(mDatabase.child("clients").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).toString());
-                addPost(post, view);
+
+                //Add client in auth
+                getInstance().createUserWithEmailAndPassword(mEmail.getText().toString(),mClientPassword.getText().toString())
+                        .addOnCompleteListener(task1 -> {
+                            Log.d(TAG, "createUserWithEmail:onComplete:" + task1.isSuccessful());
+                            if (task1.isSuccessful()){
+                                Log.d(TAG, "onComplete: AuthState: " + getInstance().getCurrentUser().getUid());
+                                addPost(post, view, getInstance().getCurrentUser().getUid());
+
+                            }
+                            if (!task1.isSuccessful()) {
+                                Log.d(TAG, "onComplete: with failure "+task1.getException().toString());
+
+                                Toast.makeText(AddClientActivity.this, "Unable to Register",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: "+ e.toString());
+                    }
+                });
+
             }
             else{
                 Toast.makeText(AddClientActivity.this, "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
@@ -76,10 +101,11 @@ public class AddClientActivity extends AppCompatActivity {
         });
     }
 
-    private void addPost(Client post, View view) {
-        String key = mDatabase.child(getString(R.string.dbnode_clients)).push().getKey();
+    private void addPost(Client post, View view, String uid) {
+
+        //add client in client database
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/clients/" + key, post.toMap());
+        childUpdates.put("/clients/" + uid, post.toMap());
         mDatabase.updateChildren(childUpdates)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -87,19 +113,19 @@ public class AddClientActivity extends AppCompatActivity {
                         Toast.makeText(view.getContext(), "Client added and email sent.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(AddClientActivity.this,WorkSpaceActivity.class);
 
+
+                        //Send client email
                         String subject = "Synergii temporary Login Credentials ";
                         String message = "You have been added as a client.\n" +
                                 "These are your login details:\n" +
                                 "Username: " + mEmail.getText().toString() +
                                 "\n Password:" + mClientPassword.getText().toString() +
                                 "\n Change password after first login.";
-
-
                         Intent intent2 = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                                 "mailto", "mEmail.getText().toString()", null));
                         intent2.putExtra(Intent.EXTRA_SUBJECT, subject);
                         intent2.putExtra(Intent.EXTRA_TEXT, message);
-                        //intent2.putExtra(Intent.EXTRA_EMAIL, mEmail.getText().toString());
+                        intent2.putExtra(Intent.EXTRA_EMAIL, mEmail.getText().toString());
                         startActivity(intent2);
                         finish();
 
@@ -113,7 +139,5 @@ public class AddClientActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 }

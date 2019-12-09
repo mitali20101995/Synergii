@@ -1,5 +1,6 @@
 package com.example.synergii.Adapters;
 
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,17 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.synergii.R;
+import com.example.synergii.models.Property;
+
+import java.util.ArrayList;
 
 public class ClientMyPropertiesRecyclerAdapter extends RecyclerView.Adapter<ClientMyPropertiesRecyclerAdapter.RecyclerViewHolder> {
-    private String[] data;
+    private ArrayList<Property> data;
     private ClientMyPropertiesRecyclerAdapter.OnNoteListener onNoteListener;
+   // private SharedPreferences sharedPreferences;
+   public static final String TAG = "ClientMyProRecycle";
 
-    public ClientMyPropertiesRecyclerAdapter(String[] data, ClientMyPropertiesRecyclerAdapter.OnNoteListener onNoteListener){
+    public ClientMyPropertiesRecyclerAdapter(ArrayList<Property> data, ClientMyPropertiesRecyclerAdapter.OnNoteListener onNoteListener){
         this.data = data;
         this.onNoteListener = onNoteListener;
     }
@@ -29,26 +35,29 @@ public class ClientMyPropertiesRecyclerAdapter extends RecyclerView.Adapter<Clie
 
     @Override
     public void onBindViewHolder(ClientMyPropertiesRecyclerAdapter.RecyclerViewHolder holder, int position) {
-        String text = data[position];
-        holder.propDetailsTextView.setText(text);
+        Property property = data.get(position);
+        holder.propDetailsTextView.setText(property.getAddress());
+        holder.saleOrLease.setText(property.getTransaction_type());
     }
 
     @Override
     public int getItemCount() {
-        return data.length;
+        return data.size();
     }
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imgIcon;
         ImageView favStarIcon;
         TextView propDetailsTextView;
+        TextView saleOrLease;
         ClientMyPropertiesRecyclerAdapter.OnNoteListener onNoteListener;
 
         public RecyclerViewHolder(View itemView, ClientMyPropertiesRecyclerAdapter.OnNoteListener onNoteListener) {
             super(itemView);
             imgIcon = (ImageView) itemView.findViewById(R.id.imgIcon);
-            favStarIcon = (ImageView) itemView.findViewById(R.id.favStarIcon);
-            propDetailsTextView = (TextView) itemView.findViewById(R.id.propDetailsTextView);
+            //favStarIcon = (ImageView) itemView.findViewById(R.id.favStarIcon);
+            saleOrLease = (TextView) itemView.findViewById(R.id.saleOrLeaseClientMyPro);
+            propDetailsTextView = (TextView) itemView.findViewById(R.id.propDetailsTextViewClientMyPro);
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);
         }

@@ -23,12 +23,20 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:paddingLeft="10dp"
-            android:text=" Property 1\n 17 Jasmine Rd Toronto, Ontario M9M2P8"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/saleOrLeaseLabelClient"
+            android:layout_width="wrap_content"
+            android:layout_gravity="left"
+            android:textColorHighlight="@color/colorAccent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:textSize="17sp" />
+
         <Button
-            android:id="@+id/addToWorkspaceBtn"
+            android:id="@+id/addToWorkspaceBtnClient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add To Workspace" />

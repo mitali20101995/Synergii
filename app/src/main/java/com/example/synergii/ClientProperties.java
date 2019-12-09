@@ -1,7 +1,10 @@
 package com.example.synergii;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,25 +16,69 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.synergii.Adapters.ClientMyPropertiesRecyclerAdapter;
+import com.example.synergii.models.Client;
+import com.example.synergii.models.Property;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class ClientProperties extends Fragment implements ClientMyPropertiesRecyclerAdapter.OnNoteListener {
 
+    public static final String TAG = "ClientMyProperties";
     View v;
-    @Nullable
+    private SharedPreferences sharedPreferences;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.activity_client_properties,container,false);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        this.sharedPreferences = v.getContext().getSharedPreferences("com.example.synergii", Context.MODE_PRIVATE);
 
         RecyclerView clientMyPropertiesList = (RecyclerView) v.findViewById(R.id.clientMyPropertiesList);
         clientMyPropertiesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        String[] data = {"Property 1 \n 17 Jasmine Rd Toronto, Ontario M9M2P8", "Property 2 \n 17 Jasmine Rd Toronto, Ontario M9M2P8", "Property 3 \n 17 Jasmine Rd Toronto, Ontario M9M2P8", " Property 4 \n 17 Jasmine Rd Toronto, Ontario M9M2P8 ", "Property 5 \n 17 Jasmine Rd Toronto, Ontario M9M2P8", "Property 6 \n 17 Jasmine Rd Toronto, Ontario M9M2P8", "Property 7 \n 17 Jasmine Rd Toronto, Ontario M9M2P8", "Property 8 \n 17 Jasmine Rd Toronto, Ontario M9M2P8"};
-        clientMyPropertiesList.setAdapter(new ClientMyPropertiesRecyclerAdapter(data, this));
+        reference.child(v.getContext().getString(R.string.dbnode_clients))
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        ArrayList<String> clientProperties = dataSnapshot.getValue(Client.class).getProperties();
+                        reference.child(v.getContext().getString(R.string.dbnode_properties))
+                                .orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange( DataSnapshot dataSnapshot) {
+                                ArrayList<Property> properties = new ArrayList<>();
 
-        /*BottomNavigationView bottomNav = v.findViewById(R.id.bottom_navigation_client);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
+                                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                                    Log.d(TAG, "onDataChange: query method found property: "
+                                            + singleSnapshot.getValue(Property.class).toString());
+                                    Property property = singleSnapshot.getValue(Property.class);
+                                    property.setId(singleSnapshot.getKey());
+                                    if(clientProperties.contains(property.getId())){
+                                        properties.add(property);
+                                    }
+                                }
+                                clientMyPropertiesList.setAdapter(new ClientMyPropertiesRecyclerAdapter(properties, ClientProperties.this::onNoteClick));
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-         */
+                            }
+                        });
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+
+                });
         return v;
     }
 

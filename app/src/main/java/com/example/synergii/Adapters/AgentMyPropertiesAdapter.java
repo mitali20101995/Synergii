@@ -35,6 +35,7 @@ public class AgentMyPropertiesAdapter extends RecyclerView.Adapter<AgentMyProper
     public void onBindViewHolder(AgentMyPropertiesAdapter.RecyclerViewHolder holder, int position) {
         Property property = data.get(position);
         holder.propDetailsTextView.setText(property.getAddress());
+        holder.saleOrLease.setText(property.getTransaction_type());
     }
 
     @Override
@@ -46,12 +47,14 @@ public class AgentMyPropertiesAdapter extends RecyclerView.Adapter<AgentMyProper
         ImageView imgIcon;
         ImageView favStarIcon;
         TextView propDetailsTextView;
+        TextView saleOrLease;
         AgentMyPropertiesAdapter.OnNoteListener onNoteListener;
 
         public RecyclerViewHolder(View itemView, AgentMyPropertiesAdapter.OnNoteListener onNoteListener) {
             super(itemView);
             imgIcon = (ImageView) itemView.findViewById(R.id.imgIcon);
-            favStarIcon = (ImageView) itemView.findViewById(R.id.favStarIcon);
+            saleOrLease = (TextView)  itemView.findViewById(R.id.saleOrLeaseMyProperties);
+//            favStarIcon = (ImageView) itemView.findViewById(R.id.favStarIcon);
             propDetailsTextView = (TextView) itemView.findViewById(R.id.propDetailsTextView);
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);

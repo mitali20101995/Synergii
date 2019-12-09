@@ -21,11 +21,17 @@
         android:text="Property Details"
         android:textSize="18sp" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/favStarIcon"
+    <TextView
+        android:id="@+id/saleOrLeaseMyProperties"
         android:layout_width="wrap_content"
-        android:layout_height="53dp"
-        android:paddingTop="10dp"
-        app:srcCompat="@android:drawable/btn_star_big_off" />
+        android:layout_height="60dp"
+        android:paddingTop="10dp" />
+
+<!--    <androidx.appcompat.widget.AppCompatImageView-->
+<!--        android:id="@+id/favStarIcon"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="53dp"-->
+<!--        android:paddingTop="10dp"-->
+<!--        app:srcCompat="@android:drawable/btn_star_big_off" />-->
 
 </LinearLayout>

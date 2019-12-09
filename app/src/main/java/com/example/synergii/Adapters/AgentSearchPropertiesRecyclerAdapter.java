@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -95,13 +96,14 @@ public class AgentSearchPropertiesRecyclerAdapter extends RecyclerView.Adapter<A
                                         }
                                         String serializedClient = clients == null ? null : new Gson().toJson(clients);
                                         sharedPreferences.edit().putString("com.example.synergii.clients", serializedClient).apply();
-                                    }
 
+                                    }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                     }
                                 });
+                        Toast.makeText(context, "Property Added.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

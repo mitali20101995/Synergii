@@ -62,7 +62,7 @@ public class PropertiesFragment extends Fragment implements AgentMyPropertiesAda
                     @Override
                     public void onDataChange( DataSnapshot dataSnapshot) {
                         ArrayList<Property> properties = new ArrayList<>();
-                        //this loop will return a single result
+
                         for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                             Log.d(TAG, "onDataChange: query method found property: "
                                     + singleSnapshot.getValue(Property.class).toString());

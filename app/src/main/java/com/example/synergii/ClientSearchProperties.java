@@ -1,7 +1,10 @@
 package com.example.synergii;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,16 +21,28 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.synergii.Adapters.ClientSearchPropertiesRecyclerAdapter;
+import com.example.synergii.models.Property;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class ClientSearchProperties extends Fragment implements com.example.synergii.Adapters.ClientSearchPropertiesRecyclerAdapter.OnNoteListener, AdapterView.OnItemSelectedListener {
 
     View v;
     LinearLayout collapseList;
-
+    public static final String TAG = "ClientSearchProperty";
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    private SharedPreferences sharedPreferences;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.activity_client_search_properties,container,false);
+        sharedPreferences = v.getContext().getSharedPreferences("com.example.synergii", Context.MODE_PRIVATE);
 
         Spinner filterSpinner = v.findViewById((R.id.filterSpinner));
         ArrayAdapter<CharSequence> filterDataAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.Filter, android.R.layout.simple_spinner_item);
@@ -59,10 +74,34 @@ public class ClientSearchProperties extends Fragment implements com.example.syne
         upperPriceSpinner.setAdapter(upperPriceDataAdapter);
         upperPriceSpinner.setOnItemSelectedListener(this);
 
+        //Client search properties Recycleview
         RecyclerView clientSearchPropertiesList = (RecyclerView) v.findViewById(R.id.clientSearchPropertiesList);
         clientSearchPropertiesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        String[] data = {"property1", "property2", "property3", "property4", "property5", "property6", "property7", "property8"};
-        clientSearchPropertiesList.setAdapter(new ClientSearchPropertiesRecyclerAdapter(data, this));
+
+
+
+        Query query = reference.child(getString(R.string.dbnode_properties));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange( DataSnapshot dataSnapshot) {
+                ArrayList<Property> properties = new ArrayList<>();
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: query method found property: "
+                            + singleSnapshot.getValue(Property.class).toString());
+                    Property property = singleSnapshot.getValue(Property.class);
+                    property.setId(singleSnapshot.getKey());
+                    properties.add(property);
+                }
+                clientSearchPropertiesList.setAdapter(new ClientSearchPropertiesRecyclerAdapter(properties,sharedPreferences,ClientSearchProperties.this::onNoteClick));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+        //clientSearchPropertiesList.setAdapter(new ClientSearchPropertiesRecyclerAdapter(data, this));
 
         collapseList = (LinearLayout) v.findViewById(R.id.collapseList);
         collapseList.setVisibility(View.GONE);

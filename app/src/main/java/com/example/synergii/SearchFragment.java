@@ -92,15 +92,12 @@ public class SearchFragment extends Fragment implements AgentSearchPropertiesRec
             @Override
             public void onDataChange( DataSnapshot dataSnapshot) {
                 ArrayList<Property> properties = new ArrayList<>();
-                //this loop will return a single result
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "onDataChange: query method found property: "
                             + singleSnapshot.getValue(Property.class).toString());
                     Property property = singleSnapshot.getValue(Property.class);
                     property.setId(singleSnapshot.getKey());
                     properties.add(property);
-
-
                 }
                 agentSearchPropertiesList.setAdapter(new AgentSearchPropertiesRecyclerAdapter(properties,sharedPreferences,SearchFragment.this::onNoteClick));
             }

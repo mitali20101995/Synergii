@@ -9,13 +9,16 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.synergii.R;
+import com.example.synergii.models.Property;
+
+import java.util.ArrayList;
 
 public class AgentMyPropertiesAdapter extends RecyclerView.Adapter<AgentMyPropertiesAdapter.RecyclerViewHolder>
 {
-    private String[] data;
+    private ArrayList<Property> data;
     private AgentMyPropertiesAdapter.OnNoteListener onNoteListener;
 
-    public AgentMyPropertiesAdapter(String[] data, AgentMyPropertiesAdapter.OnNoteListener onNoteListener){
+    public AgentMyPropertiesAdapter(ArrayList<Property> data, AgentMyPropertiesAdapter.OnNoteListener onNoteListener){
         this.data = data;
         this.onNoteListener = onNoteListener;
     }
@@ -30,13 +33,13 @@ public class AgentMyPropertiesAdapter extends RecyclerView.Adapter<AgentMyProper
 
     @Override
     public void onBindViewHolder(AgentMyPropertiesAdapter.RecyclerViewHolder holder, int position) {
-        String text = data[position];
-        holder.propDetailsTextView.setText(text);
+        Property property = data.get(position);
+        holder.propDetailsTextView.setText(property.getAddress());
     }
 
     @Override
     public int getItemCount() {
-        return data.length;
+        return data.size();
     }
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

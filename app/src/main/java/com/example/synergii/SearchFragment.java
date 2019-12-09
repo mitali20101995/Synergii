@@ -2,6 +2,7 @@ package com.example.synergii;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +23,35 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.example.synergii.Adapters.AgentSearchPropertiesRecyclerAdapter;
+import com.example.synergii.Adapters.RecyclerAdapter;
+import com.example.synergii.models.Client;
+import com.example.synergii.models.Property;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-public class SearchFragment extends Fragment implements AgentSearchPropertiesRecyclerAdapter.OnNoteListener, AdapterView.OnItemSelectedListener{
+import java.util.ArrayList;
+
+public class SearchFragment extends Fragment implements AgentSearchPropertiesRecyclerAdapter.OnNoteListener, AdapterView.OnItemSelectedListener
+{
     View v;
-    LinearLayout collapseList;
+    public static final String TAG = "AgentSearchfragment";
+    private LinearLayout collapseList;
+    private Button resetFilterBtn;
+    private Button filterResultBtn;
+    private RecyclerView agentSearchPropertiesList;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             v = inflater.inflate(R.layout.fragment_search, container, false);
             super.onCreate(savedInstanceState);
+            sharedPreferences = v.getContext().getSharedPreferences("com.example.synergii", Context.MODE_PRIVATE);
 
             Spinner filterSpinner = v.findViewById((R.id.filterSpinner));
             ArrayAdapter<CharSequence> filterDataAdapter = ArrayAdapter.createFromResource(getContext(), R.array.Filter, android.R.layout.simple_spinner_item);
@@ -62,15 +83,42 @@ public class SearchFragment extends Fragment implements AgentSearchPropertiesRec
             upperPriceSpinner.setAdapter(upperPriceDataAdapter);
             upperPriceSpinner.setOnItemSelectedListener(this);
 
-            RecyclerView agentSearchPropertiesList = (RecyclerView) v.findViewById(R.id.agentSearchPropertiesList);
+    //Agent Search List
+            agentSearchPropertiesList =  v.findViewById(R.id.agentSearchPropertiesList);
             agentSearchPropertiesList.setLayoutManager(new LinearLayoutManager(getContext()));
-            String[] data = {"property1", "property2", "property3", "property4", "property5", "property6", "property7", "property8"};
-            agentSearchPropertiesList.setAdapter(new AgentSearchPropertiesRecyclerAdapter(data, this));
 
-        collapseList = (LinearLayout) v.findViewById(R.id.collapseList);
+        Query query = reference.child(getString(R.string.dbnode_properties));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange( DataSnapshot dataSnapshot) {
+                ArrayList<Property> properties = new ArrayList<>();
+                //this loop will return a single result
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: query method found property: "
+                            + singleSnapshot.getValue(Property.class).toString());
+                    Property property = singleSnapshot.getValue(Property.class);
+                    property.setId(singleSnapshot.getKey());
+                    properties.add(property);
+
+
+                }
+                agentSearchPropertiesList.setAdapter(new AgentSearchPropertiesRecyclerAdapter(properties,sharedPreferences,SearchFragment.this::onNoteClick));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+
+
+
+        //Collapse list
+        collapseList =  v.findViewById(R.id.collapseList);
         collapseList.setVisibility(View.GONE);
 
-        Button resetFilterBtn = (Button) v.findViewById(R.id.resetFilterBtn);
+        resetFilterBtn =  v.findViewById(R.id.resetFilterBtn);
         resetFilterBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -79,7 +127,7 @@ public class SearchFragment extends Fragment implements AgentSearchPropertiesRec
             }
         });
 
-        Button filterResultBtn = (Button) v.findViewById(R.id.filterResultBtn);
+        filterResultBtn =  v.findViewById(R.id.filterResultBtn);
         filterResultBtn.setOnClickListener(new View.OnClickListener()
         {
 
@@ -120,7 +168,6 @@ public class SearchFragment extends Fragment implements AgentSearchPropertiesRec
             Intent startIntent = new Intent(getContext(), PropertyDetailActivity.class);
             startActivity(startIntent);
         }
-
 
     }
 

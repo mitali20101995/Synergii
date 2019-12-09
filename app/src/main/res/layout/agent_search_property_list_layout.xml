@@ -8,7 +8,7 @@
         android:id="@+id/imgIcon"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/villa" />
+        android:src="@drawable/ic_villa" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -19,21 +19,27 @@
         <TextView
             android:id="@+id/propDetailsTextView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
-            android:text="Property Details"
-            android:textSize="18sp" />
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/saleOrLeaseLabel"
+            android:layout_width="wrap_content"
+            android:layout_gravity="left"
+            android:textColorHighlight="@color/colorAccent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:textSize="17sp" />
 
         <Button
             android:id="@+id/addToWorkspaceBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add To Workspace" />
+            android:text="Add to Workspace" />
 
     </LinearLayout>
-
 
 
 </LinearLayout>

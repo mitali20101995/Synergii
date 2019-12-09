@@ -17,7 +17,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.Nullable;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +29,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.synergii.Adapters.RecyclerAdapter;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -36,10 +40,13 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
     private TextView bName ;
     private TextView aInfo;
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_space);
+        sharedPreferences = getSharedPreferences("com.example.synergii", Context.MODE_PRIVATE);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         //Agent Profile info
@@ -49,9 +56,7 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
         Query brokerage_query=reference.child(getString(R.string.dbnode_users))
                 .orderByKey()
                 .equalTo(currentUID);
-
-
-           brokerage_query.addListenerForSingleValueEvent(new ValueEventListener() {
+        brokerage_query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -60,8 +65,7 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
                                 + singleSnapshot.getValue(User.class).toString());
                         User user = singleSnapshot.getValue(User.class);
                         bName.setText(user.getBrokerageName());
-                        aInfo.setText(user.getFirstName());
-
+                        aInfo.setText(user.getFirstName() + " " + user.getLastName());
                     }
                 }
                 @Override
@@ -69,7 +73,6 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
 
             });
     //Client list
-        //data = new ArrayList<>();
         clientsList = findViewById(R.id.recyclerViewHome);
         clientsList.setLayoutManager(new LinearLayoutManager(this));
 
@@ -79,14 +82,18 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<String> clients = new ArrayList<>();
+                ArrayList<Client> clients = new ArrayList<>();
                 //this loop will return a single result
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "onDataChange: query method found user: "
                             + singleSnapshot.getValue(Client.class).toString());
                     Client client= singleSnapshot.getValue(Client.class);
-                    clients.add(client.getFirstName() + " " + client.getLastName());
+                    client.setId(singleSnapshot.getKey());
+                    clients.add(client);
                 }
+
+                String serializedClient = clients == null ? null : new Gson().toJson(clients);
+                sharedPreferences.edit().putString("com.example.synergii.clients", serializedClient).apply();
                 clientsList.setAdapter(new RecyclerAdapter(clients,WorkSpaceActivity.this::onNoteClick));
             }
             @Override
@@ -99,7 +106,9 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
     public void onNoteClick(int position) {
 
         Intent startIntent = new Intent(getApplicationContext(), AgentHomeActivity.class);
+        startIntent.putExtra("selectedClientPosition",position);
         startActivity(startIntent);
+
 
     }
 

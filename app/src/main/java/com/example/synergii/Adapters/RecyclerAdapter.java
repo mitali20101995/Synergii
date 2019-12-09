@@ -19,10 +19,10 @@ import static com.example.synergii.WorkSpaceActivity.TAG;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
 
-    private ArrayList<String> data;
+    private ArrayList<Client> data;
     private OnNoteListener onNoteListener;
 
-    public RecyclerAdapter(ArrayList<String> data, OnNoteListener onNoteListener){
+    public RecyclerAdapter(ArrayList<Client> data, OnNoteListener onNoteListener){
         this.data = data;
         this.onNoteListener = onNoteListener;
     }
@@ -36,9 +36,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     }
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
-        String text = data.get(position);
-        Log.d(TAG, "onBindViewHolder: "+ text);
-        holder.clientNameTextView.setText(text);
+        Client client = data.get(position);
+        holder.clientNameTextView.setText(client.getFirstName() + " " + client.getLastName());
+
     }
 
     @Override

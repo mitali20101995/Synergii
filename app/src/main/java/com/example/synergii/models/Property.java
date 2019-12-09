@@ -3,8 +3,12 @@ package com.example.synergii.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+
 public class Property implements Parcelable
 {
+    @Exclude
+    private String id;
     private String mls_number;
     private String address;
     private String city;
@@ -30,6 +34,14 @@ public class Property implements Parcelable
     }
 
     public Property() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public static final Creator<Property> CREATOR = new Creator<Property>() {

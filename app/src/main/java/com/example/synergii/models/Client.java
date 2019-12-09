@@ -3,14 +3,19 @@ package com.example.synergii.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Client implements Parcelable {
 
-    private String clientId;
-    private Listing[] properties;
+    @Exclude
+    private String id;
+    private ArrayList<String> properties;
     private String assignedAgent;
     private String[] notifications;
     private String firstName;
@@ -20,8 +25,8 @@ public class Client implements Parcelable {
     private String email;
     private String listingId;
 
-    public Client(String clientId, Listing[] properties, String assignedAgent, String[] notifications, String firstName, String lastName, String phone, String clientPassword, String email, String listingId) {
-        this.clientId = clientId;
+    public Client(String id, ArrayList<String> properties, String assignedAgent, String[] notifications, String firstName, String lastName, String phone, String clientPassword, String email, String listingId) {
+        this.id = id;
         this.properties = properties;
         this.assignedAgent = assignedAgent;
         this.notifications = notifications;
@@ -106,19 +111,19 @@ public class Client implements Parcelable {
     public Client() {
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getId() {
+        return id;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public Listing[] getProperties() {
-        return properties;
+    public ArrayList<String> getProperties() {
+        return properties == null ? new ArrayList<>() : properties;
     }
 
-    public void setProperties(Listing[] properties) {
+    public void setProperties(ArrayList<String> properties) {
         this.properties = properties;
     }
 
@@ -141,8 +146,8 @@ public class Client implements Parcelable {
     @Override
     public String toString() {
         return "Client{" +
-                "clientId=" + clientId +
-                ", properties=" + Arrays.toString(properties) +
+                "clientId=" + id +
+                ", properties=" + properties +
                 ", assignedAgent=" + assignedAgent +
                 ", notifications=" + Arrays.toString(notifications) +
                 ", firstName='" + firstName + '\'' +
@@ -154,7 +159,7 @@ public class Client implements Parcelable {
     }
 
     protected Client(Parcel in) {
-        clientId = in.readString();
+        id = in.readString();
         firstName = in.readString();
         lastName = in.readString();
         email = in.readString();
@@ -162,6 +167,7 @@ public class Client implements Parcelable {
         clientPassword = in.readString();
         phone = in.readString();
         assignedAgent = in.readParcelable(Client.class.getClassLoader());
+        properties = in.readArrayList(String.class.getClassLoader());
     }
 
     @Override
@@ -174,15 +180,16 @@ public class Client implements Parcelable {
         dest.writeString(firstName);
         dest.writeString(lastName);
         dest.writeString(email);
-        dest.writeString(clientId);
+        dest.writeString(id);
         dest.writeString(assignedAgent);
         dest.writeString(phone);
         dest.writeString(clientPassword);
+        dest.writeString(properties.toString());
     }
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("clientId",clientId);
+        result.put("clientId",id);
         result.put("firstName",firstName);
         result.put("lastName",lastName);
         result.put("email",email);
@@ -190,6 +197,7 @@ public class Client implements Parcelable {
         result.put("assignedAgent",assignedAgent);
         result.put("clientPassword", clientPassword);
         result.put("listingId",listingId);
+        result.put("properties", properties);
 
         return result;
     }

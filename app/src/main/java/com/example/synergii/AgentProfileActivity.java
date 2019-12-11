@@ -9,6 +9,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,8 +61,9 @@ public class AgentProfileActivity extends AppCompatActivity
     private TextView mResetPasswordLink;
     private DatabaseReference mDatabase;
     private boolean mStoragePermissions;
-    //private Uri mSelectedImageUri;
-    //private Bitmap mSelectedImageBitmap;
+    private Uri mSelectedImageUri;
+    private Bitmap mSelectedImageBitmap;
+    //private  mProfileImage
     private byte[] mBytes;
     private double progress;
     public static boolean isActivityRunning;
@@ -79,6 +82,7 @@ public class AgentProfileActivity extends AppCompatActivity
         mPhone = findViewById(R.id.editTextPhNumber);
         mBrokerageName = findViewById(R.id.editTextBrokerageName);
         mDescription = findViewById(R.id.editTextDescription);
+
         mSpinner = findViewById((R.id.titleSpinner));
         verifyStoragePermissions();
         setCurrentEmail();
@@ -253,7 +257,7 @@ public class AgentProfileActivity extends AppCompatActivity
                     mBrokerageName.setText(user.getBrokerageName());
                     mTitle = user.getTitle();
                     mDescription.setText(user.getDescription());
-                    //ImageLoader.getInstance().displayImage(user.getProfile_image(), mProfileImage);
+                    //ImageLoader.getInstance().displayImage(user.getProfilePhoto(), mProfileImage);
                 }
             }
 

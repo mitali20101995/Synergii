@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.synergii.R;
 import com.example.synergii.models.Property;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -56,6 +57,10 @@ public class AgentMyPropertiesAdapter extends RecyclerView.Adapter<AgentMyProper
             saleOrLease = (TextView)  itemView.findViewById(R.id.saleOrLeaseMyProperties);
 //            favStarIcon = (ImageView) itemView.findViewById(R.id.favStarIcon);
             propDetailsTextView = (TextView) itemView.findViewById(R.id.propDetailsTextView);
+            Picasso.with(itemView.getContext())
+                    .load(R.drawable.agent)
+                    .into(imgIcon);
+
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);
         }

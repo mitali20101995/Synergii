@@ -27,10 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class AgentSearchPropertiesRecyclerAdapter extends RecyclerView.Adapter<AgentSearchPropertiesRecyclerAdapter.RecyclerViewHolder>
 {
@@ -56,9 +54,15 @@ public class AgentSearchPropertiesRecyclerAdapter extends RecyclerView.Adapter<A
 
     @Override
     public void onBindViewHolder(AgentSearchPropertiesRecyclerAdapter.RecyclerViewHolder holder, int position) {
+
         Property property = data.get(position);
         holder.propDetailsTextView.setText(property.getAddress());
         holder.saleOrLease.setText(property.getTransaction_type());
+
+        Picasso.with(holder.itemView.getContext())
+                .load(property.getImageUrl())
+                .into(holder.imgIcon);
+
 
        holder.addToWorkspaceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,10 +134,7 @@ public class AgentSearchPropertiesRecyclerAdapter extends RecyclerView.Adapter<A
             propDetailsTextView = (TextView) itemView.findViewById(R.id.propDetailsTextView);
             saleOrLease = (TextView) itemView.findViewById(R.id.saleOrLeaseLabel);
 
-            Picasso.with(itemView.getContext())
-                    //.load("www.picsum.photos/id/321/200/300")
-                    .load("https://synergii.ca/assets/img/home/logo.png")
-                    .into(imgIcon);
+
 
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);

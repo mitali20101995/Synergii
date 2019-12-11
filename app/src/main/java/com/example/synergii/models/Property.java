@@ -19,8 +19,10 @@ public class Property implements Parcelable
     private String description;
     private String user_id;
     private String client_id;
+    private String imageUrl;
 
-    public Property(String mls_number, String address, String city, String property_type, String transaction_type, String price, String floor_space_or_land_size, String description, String user_id, String client_id) {
+    public Property(String id, String mls_number, String address, String city, String property_type, String transaction_type, String price, String floor_space_or_land_size, String description, String user_id, String client_id, String imageUrl) {
+        this.id = id;
         this.mls_number = mls_number;
         this.address = address;
         this.city = city;
@@ -31,7 +33,9 @@ public class Property implements Parcelable
         this.description = description;
         this.user_id = user_id;
         this.client_id = client_id;
+        this.imageUrl = imageUrl;
     }
+
 
     public Property() {
     }
@@ -136,6 +140,14 @@ public class Property implements Parcelable
         this.client_id = client_id;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     @Override
     public String toString() {
         return "Property{" +
@@ -147,6 +159,7 @@ public class Property implements Parcelable
                 ", price='" + price + '\'' +
                 ", floor_space_or_land_size='" + floor_space_or_land_size + '\'' +
                 ", description='" + description + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
                 ", user_id='" + user_id + '\'' +
                 ", client_id='" + client_id + '\'' +
                 '}';
@@ -170,6 +183,7 @@ public class Property implements Parcelable
         description = in.readString();
         user_id = in.readString();
         client_id = in.readString();
+        imageUrl = in.readString();
     }
 
 
@@ -186,5 +200,6 @@ public class Property implements Parcelable
         dest.writeString(description);
         dest.writeString(user_id);
         dest.writeString(client_id);
+        dest.writeString(imageUrl);
     }
 }

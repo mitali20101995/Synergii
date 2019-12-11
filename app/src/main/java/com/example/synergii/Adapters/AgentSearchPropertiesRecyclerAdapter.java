@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -128,8 +129,15 @@ public class AgentSearchPropertiesRecyclerAdapter extends RecyclerView.Adapter<A
             addToWorkspaceBtn = (Button) itemView.findViewById(R.id.addToWorkspaceBtn);
             propDetailsTextView = (TextView) itemView.findViewById(R.id.propDetailsTextView);
             saleOrLease = (TextView) itemView.findViewById(R.id.saleOrLeaseLabel);
+
+            Picasso.with(itemView.getContext())
+                    //.load("www.picsum.photos/id/321/200/300")
+                    .load("https://synergii.ca/assets/img/home/logo.png")
+                    .into(imgIcon);
+
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);
+
         }
 
         @Override

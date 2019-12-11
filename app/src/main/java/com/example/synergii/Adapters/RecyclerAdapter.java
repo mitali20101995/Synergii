@@ -6,16 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.synergii.R;
 import com.example.synergii.models.Client;
-
 import java.util.ArrayList;
 
-import static com.example.synergii.WorkSpaceActivity.TAG;
+
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
 
@@ -55,6 +52,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
             super(itemView);
             imgIcon = (ImageView) itemView.findViewById(R.id.imgIcon);
             clientNameTextView = (TextView) itemView.findViewById(R.id.clientNameTextView);
+
             this.onNoteListener = onNoteListener;
             itemView.setOnClickListener(this);
         }

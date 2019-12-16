@@ -15,20 +15,23 @@ public class User implements Parcelable {
     private String brokerageName;
     private String Description;
     private String profilePhoto;
+    private String profileLogo;
 
-    public User() {
-    }
-    public User(String userId, String firstName, String lastName, String email, String title, String brokerageName,String Description, String phone, String password, String profilePhoto) {
+    public User(String userId, String firstName, String lastName, String email, String phone, String password, String title, String brokerageName, String description, String profilePhoto, String profileLogo) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phone = phone;
-        this.title = title;
-        this.Description = Description;
-        this.brokerageName = brokerageName;
         this.password = password;
+        this.title = title;
+        this.brokerageName = brokerageName;
+        Description = description;
         this.profilePhoto = profilePhoto;
+        this.profileLogo = profileLogo;
+    }
+
+    public User() {
     }
 
     protected User(Parcel in) {
@@ -42,6 +45,7 @@ public class User implements Parcelable {
         brokerageName = in.readString();
         Description = in.readString();
         profilePhoto = in.readString();
+        profileLogo = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -141,6 +145,7 @@ public class User implements Parcelable {
         parcel.writeString(Description);
         parcel.writeString(brokerageName);
         parcel.writeString(profilePhoto);
+        parcel.writeString(profileLogo);
     }
 
     @Override
@@ -154,7 +159,16 @@ public class User implements Parcelable {
                 ", brokerageName='" + brokerageName + '\'' +
                 ", Description='" + Description + '\'' +
                 ", profilePhoto='" + profilePhoto + '\'' +
+                ", profileLogo='" + profileLogo + '\'' +
                 ", user_id='" + userId + '\'' +
                 '}';
+    }
+
+    public String getProfileLogo() {
+        return profileLogo;
+    }
+
+    public void setProfileLogo(String profileLogo) {
+        this.profileLogo = profileLogo;
     }
 }

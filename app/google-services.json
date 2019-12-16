@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "467322292669-51mq3kiab81e63094vk7pjqchi6n37b2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.synergii",
+            "certificate_hash": "c41bbd5ca28cff12c0527ca3c0e008c1629b6190"
+          }
+        },
+        {
           "client_id": "467322292669-4mcfoar9tgqebe53ngs2ir80osf8tvdl.apps.googleusercontent.com",
           "client_type": 3
         }

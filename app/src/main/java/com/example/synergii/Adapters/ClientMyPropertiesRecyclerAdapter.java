@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.synergii.R;
 import com.example.synergii.models.Property;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,9 @@ public class ClientMyPropertiesRecyclerAdapter extends RecyclerView.Adapter<Clie
         Property property = data.get(position);
         holder.propDetailsTextView.setText(property.getAddress());
         holder.saleOrLease.setText(property.getTransaction_type());
+        Picasso.with(holder.itemView.getContext())
+                .load(property.getImageUrl())
+                .into(holder.imgIcon);
     }
 
     @Override

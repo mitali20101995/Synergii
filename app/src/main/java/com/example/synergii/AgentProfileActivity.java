@@ -1,31 +1,33 @@
 package com.example.synergii;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.synergii.models.User;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -38,11 +40,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.text.TextUtils.isEmpty;
 
 public class AgentProfileActivity extends AppCompatActivity
 {
@@ -52,6 +57,7 @@ public class AgentProfileActivity extends AppCompatActivity
     private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText mEmail, mFName, mLName, mCurrentPassword;
     private Button mSave;
+    private ImageView mProfileImage, mProfileLogo;
     private TextView mPhone;
     private TextView mBrokerageName;
     private String mTitle;
@@ -61,18 +67,29 @@ public class AgentProfileActivity extends AppCompatActivity
     private TextView mResetPasswordLink;
     private DatabaseReference mDatabase;
     private boolean mStoragePermissions;
+    private StorageReference mStorageRef;
+    private StorageTask uploadTask;
     private Uri mSelectedImageUri;
     private Bitmap mSelectedImageBitmap;
     //private  mProfileImage
     private byte[] mBytes;
     private double progress;
     public static boolean isActivityRunning;
+    private ImageViewType selectedImgViewType;
+
+    User loggedInUser;
+
+    private enum ImageViewType {
+        IMAGE,
+        LOGO
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_profile);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mStorageRef = FirebaseStorage.getInstance().getReference("images");
         mEmail = findViewById(R.id.editTextEmail);
         mSave = findViewById(R.id.updateProfileBtn);
         mProgressBar = findViewById(R.id.progressBarProfile);
@@ -82,8 +99,10 @@ public class AgentProfileActivity extends AppCompatActivity
         mPhone = findViewById(R.id.editTextPhNumber);
         mBrokerageName = findViewById(R.id.editTextBrokerageName);
         mDescription = findViewById(R.id.editTextDescription);
-
         mSpinner = findViewById((R.id.titleSpinner));
+        mProfileImage = findViewById(R.id.agentProfilePicForm);
+        mProfileLogo = findViewById(R.id.brokerageLogoForm);
+
         verifyStoragePermissions();
         setCurrentEmail();
         init();
@@ -98,7 +117,6 @@ public class AgentProfileActivity extends AppCompatActivity
         dataAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, titles);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(dataAdapter);
-
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -117,6 +135,101 @@ public class AgentProfileActivity extends AppCompatActivity
             }
         });
 
+        //update profile pic
+        mProfileImage.setOnClickListener(v -> {
+            selectImage(ImageViewType.IMAGE);
+            if (uploadTask != null && uploadTask.isInProgress())
+            {
+                Toast.makeText(AgentProfileActivity.this,"Upload in progress.",Toast.LENGTH_LONG).show();
+            }
+            else {
+                //uploadImage();
+            }
+
+        });
+
+        mProfileLogo.setOnClickListener(v -> {
+            selectImage(ImageViewType.LOGO);
+            if (uploadTask != null && uploadTask.isInProgress())
+            {
+                Toast.makeText(AgentProfileActivity.this,"Upload in progress.",Toast.LENGTH_LONG).show();
+            }
+            else {
+                //uploadImage();
+            }
+
+        });
+    }//onCreate ends
+    private void selectImage(ImageViewType type)
+    {
+        selectedImgViewType = type;
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
+    }
+
+    private Task<Uri> uploadImageTask(Uri imguri){
+        StorageReference imageRef = mStorageRef.child(System.currentTimeMillis()+"."+ getExtenstion(imguri));
+//        Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
+//        StorageReference riversRef = storageRef.child("images/rivers.jpg");
+
+        uploadTask = imageRef.putFile(imguri);
+
+        return uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return imageRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(AgentProfileActivity.this,"Image uploaded successfully.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
+    }
+
+    private String getExtenstion(Uri uri){
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if(requestCode == 1 && resultCode == RESULT_OK && intent != null && intent.getData() != null ){
+            Uri imguri = intent.getData();
+
+            uploadImageTask(imguri).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    switch (selectedImgViewType ){
+                        case IMAGE:
+                            loggedInUser.setProfilePhoto(task.getResult().toString());
+                            Picasso.with(getApplicationContext()).load(task.getResult()).resize(mProfileImage.getWidth(), mProfileImage.getHeight()).centerCrop().into(mProfileImage);
+                            break;
+                        case LOGO:
+                            loggedInUser.setProfileLogo(task.getResult().toString());
+                            Picasso.with(getApplicationContext()).load(task.getResult()).resize(mProfileLogo.getWidth(), mProfileLogo.getHeight()).centerCrop().into(mProfileLogo);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+        }
     }
 
     private void init(){
@@ -124,28 +237,19 @@ public class AgentProfileActivity extends AppCompatActivity
         getUserAccountData();
 
         mSave.setOnClickListener(v -> {
-            Log.d(TAG, "onClick: attempting to save settings.");
-
-
-            //see if they changed the email
-//            if (!mEmail.getText( ).toString().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
-//                //make sure email and current password fields are filled
-//                if (!isEmpty(mEmail.getText().toString())
-//                        && !isEmpty(mCurrentPassword.getText().toString())) {
-//
-//                }
-//                //verify that user is changing to a company email address
-//                if (isValidDomain(mEmail.getText().toString())) {
-//                    editUserEmail(v);
-//                } else {
-//                    Toast.makeText(v.getContext(), "Invalid Domain", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            } else {
-//                Toast.makeText(v.getContext(), "Email and Current Password Fields Must be Filled to Save", Toast.LENGTH_SHORT).show();
-//            }
+            Log.d(TAG, "onClick: attempting to update profile.");
 
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+            reference.child(getString(R.string.dbnode_users))
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(getString(R.string.field_profile_photo))
+                    .setValue(loggedInUser.getProfilePhoto());
+
+            reference.child(getString(R.string.dbnode_users))
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(getString(R.string.field_profile_logo))
+                    .setValue(loggedInUser.getProfileLogo());
 
             //Change first name
             if(!mFName.getText().toString().equals("")){
@@ -249,15 +353,20 @@ public class AgentProfileActivity extends AppCompatActivity
                 for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
                     Log.d(TAG, "onDataChange: (QUERY METHOD 1) found user: "
                             + singleSnapshot.getValue(User.class).toString());
-                    User user = singleSnapshot.getValue(User.class);
+                    loggedInUser = singleSnapshot.getValue(User.class);
 
-                    mFName.setText(user.getFirstName());
-                    mLName.setText(user.getLastName());
-                    mPhone.setText(user.getPhone());
-                    mBrokerageName.setText(user.getBrokerageName());
-                    mTitle = user.getTitle();
-                    mDescription.setText(user.getDescription());
-                    //ImageLoader.getInstance().displayImage(user.getProfilePhoto(), mProfileImage);
+                    mFName.setText(loggedInUser.getFirstName());
+                    mLName.setText(loggedInUser.getLastName());
+                    mPhone.setText(loggedInUser.getPhone());
+                    mBrokerageName.setText(loggedInUser.getBrokerageName());
+                    mTitle = loggedInUser.getTitle();
+                    mDescription.setText(loggedInUser.getDescription());
+                    if(loggedInUser.getProfileLogo() != null){
+                        Picasso.with(getApplicationContext()).load(Uri.parse(loggedInUser.getProfileLogo())).resize(mProfileImage.getWidth(), mProfileImage.getHeight()).centerCrop().into(mProfileLogo);
+                    }
+                    if(loggedInUser.getProfilePhoto() != null){
+                        Picasso.with(getApplicationContext()).load(Uri.parse(loggedInUser.getProfilePhoto())).resize(mProfileImage.getWidth(), mProfileImage.getHeight()).centerCrop().into(mProfileImage);
+                    }
                 }
             }
 

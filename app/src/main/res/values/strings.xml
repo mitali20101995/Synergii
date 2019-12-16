@@ -74,6 +74,8 @@ Having entered into a lawful broker-consumer relationship with. The Terms of Use
 
 Consent to the fact that your Personal Information, including first and last name, email address, and phone number may be collected, used or disclosed. The personal information may be shared with TREB for auditing and/or legal purposes.</string>
     <string name="field_client_properties">properties</string>
+    <string name="field_profile_photo">profilePhoto</string>
+    <string name="field_profile_logo">profileLogo</string>
 
 
 </resources>

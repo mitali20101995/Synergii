@@ -154,24 +154,43 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (user != null) {
 
-                    //check if email is verified
-                    if(user.isEmailVerified()){
-                        Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                        Toast.makeText(LoginActivity.this, "Authenticated with: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                    Query query = FirebaseDatabase.getInstance().getReference()
+                            .child(getString(R.string.dbnode_users))
+                            .orderByKey()
+                            .equalTo(user.getUid());
 
-                        Intent intent = new Intent(LoginActivity.this, WorkSpaceActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
+                    query.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        if(!dataSnapshot.exists()){
+                                                            Intent intent = new Intent(LoginActivity.this, ClientHomeActivity.class);
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                            startActivity(intent);
+                                                            finish();
+                                                            return;
+                                                        }
+                                                        if(user.isEmailVerified()){
+                                                            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                                                            Toast.makeText(LoginActivity.this, "Authenticated with: " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
-                    }else{
-                        Intent intent = new Intent(LoginActivity.this, ClientHomeActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        finish();
-                        //Toast.makeText(LoginActivity.this, "Email is not Verified\nCheck your Inbox", Toast.LENGTH_SHORT).show();
-                        //FirebaseAuth.getInstance().signOut();
-                    }
+                                                            Intent intent = new Intent(LoginActivity.this, WorkSpaceActivity.class);
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }else{
+                                                            Toast.makeText(LoginActivity.this, "Email is not Verified\nCheck your Inbox", Toast.LENGTH_SHORT).show();
+                                                            FirebaseAuth.getInstance().signOut();
+                                                        }
+
+                                                    }
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                            //check if email is verified
+
 
                 } else {
                     // User is signed out

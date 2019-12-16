@@ -37,6 +37,9 @@ public class AgentMyPropertiesAdapter extends RecyclerView.Adapter<AgentMyProper
         Property property = data.get(position);
         holder.propDetailsTextView.setText(property.getAddress());
         holder.saleOrLease.setText(property.getTransaction_type());
+        Picasso.with(holder.itemView.getContext())
+                .load(property.getImageUrl())
+                .into(holder.imgIcon);
     }
 
     @Override

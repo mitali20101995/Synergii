@@ -2,6 +2,7 @@ package com.example.synergii;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +47,8 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_space);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         sharedPreferences = getSharedPreferences("com.example.synergii", Context.MODE_PRIVATE);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 

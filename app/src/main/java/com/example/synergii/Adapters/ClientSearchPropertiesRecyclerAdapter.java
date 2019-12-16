@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,6 +56,9 @@ public class ClientSearchPropertiesRecyclerAdapter extends RecyclerView.Adapter<
         Property property = data.get(position);
         holder.propDetailsTextView.setText(property.getAddress());
         holder.saleOrLease.setText(property.getTransaction_type());
+        Picasso.with(holder.itemView.getContext())
+                .load(property.getImageUrl())
+                .into(holder.imgIcon);
 
         holder.addToWorkspaceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +82,6 @@ public class ClientSearchPropertiesRecyclerAdapter extends RecyclerView.Adapter<
                                         .setValue(clientProperties);
                                 Toast.makeText(v.getContext(), "Property Added.", Toast.LENGTH_SHORT).show();
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
 

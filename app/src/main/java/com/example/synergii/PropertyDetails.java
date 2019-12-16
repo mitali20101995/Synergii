@@ -1,12 +1,8 @@
 package com.example.synergii;
-
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
-
 import java.util.ArrayList;
-
 
 public class PropertyDetails extends AppCompatActivity {
 

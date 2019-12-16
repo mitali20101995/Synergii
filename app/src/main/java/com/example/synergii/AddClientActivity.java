@@ -17,6 +17,8 @@ import com.example.synergii.models.Client;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +35,7 @@ public class AddClientActivity extends AppCompatActivity {
     //Firebase
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth2;
     // widgets
     private EditText mEmail, mFName, mLName, mListingId, mClientPassword;
     //private String mClientId;
@@ -54,6 +57,18 @@ public class AddClientActivity extends AppCompatActivity {
         mClientPassword = findViewById(R.id.editTextClientPassword);
         mBtnAddClient = findViewById(R.id.addClientBtn);
 
+
+        FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
+                .setDatabaseUrl("https://synergii-5dfe2.firebaseio.com")
+                .setApiKey("AIzaSyCAtv1jaDeqUZRjx6lllMgtm6z2HKDnToE")
+                .setApplicationId("synergii-5dfe2").build();
+
+        try { FirebaseApp myApp = FirebaseApp.initializeApp(getApplicationContext(), firebaseOptions, "com.example.synergii");
+            mAuth2 = FirebaseAuth.getInstance(myApp);
+        } catch (IllegalStateException e){
+            mAuth2 = FirebaseAuth.getInstance(FirebaseApp.getInstance("com.example.synergii"));
+        }
+
         setOnCLickListener();
 
     }
@@ -72,15 +87,16 @@ public class AddClientActivity extends AppCompatActivity {
                 post.setClientPassword(mClientPassword.getText().toString());
 
                 //Add client in auth
-                getInstance().createUserWithEmailAndPassword(mEmail.getText().toString(),mClientPassword.getText().toString())
+                mAuth2.createUserWithEmailAndPassword(mEmail.getText().toString(),mClientPassword.getText().toString())
                         .addOnCompleteListener(task1 -> {
                             Log.d(TAG, "createUserWithEmail:onComplete:" + task1.isSuccessful());
                             if (task1.isSuccessful()){
                                 Log.d(TAG, "onComplete: AuthState: " + getInstance().getCurrentUser().getUid());
                                 addPost(post, view, getInstance().getCurrentUser().getUid());
+                                mAuth2.signOut();
 
                             }
-                            if (!task1.isSuccessful()) {
+                            else {
                                 Log.d(TAG, "onComplete: with failure "+task1.getException().toString());
 
                                 Toast.makeText(AddClientActivity.this, "Unable to Register",

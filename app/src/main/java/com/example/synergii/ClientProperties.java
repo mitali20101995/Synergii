@@ -47,31 +47,33 @@ public class ClientProperties extends Fragment implements ClientMyPropertiesRecy
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        ArrayList<String> clientProperties = dataSnapshot.getValue(Client.class).getProperties();
-                        reference.child(v.getContext().getString(R.string.dbnode_properties))
-                                .orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange( DataSnapshot dataSnapshot) {
-                                ArrayList<Property> properties = new ArrayList<>();
+                        //for (DataSnapshot singleDatasnapshot : dataSnapshot.getChildren()) {
+                            ArrayList<String> clientProperties = dataSnapshot.getValue(Client.class).getProperties();
+                            reference.child(v.getContext().getString(R.string.dbnode_properties))
+                                    .orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    ArrayList<Property> properties = new ArrayList<>();
 
-                                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                                    Log.d(TAG, "onDataChange: query method found property: "
-                                            + singleSnapshot.getValue(Property.class).toString());
-                                    Property property = singleSnapshot.getValue(Property.class);
-                                    property.setId(singleSnapshot.getKey());
-                                    if(clientProperties.contains(property.getId())){
-                                        properties.add(property);
+                                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                                        Log.d(TAG, "onDataChange: query method found property: "
+                                                + singleSnapshot.getValue(Property.class).toString());
+                                        Property property = singleSnapshot.getValue(Property.class);
+                                        property.setId(singleSnapshot.getKey());
+                                        if (clientProperties.contains(property.getId())) {
+                                            properties.add(property);
+                                        }
                                     }
+                                    clientMyPropertiesList.setAdapter(new ClientMyPropertiesRecyclerAdapter(properties, ClientProperties.this::onNoteClick));
                                 }
-                                clientMyPropertiesList.setAdapter(new ClientMyPropertiesRecyclerAdapter(properties, ClientProperties.this::onNoteClick));
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            }
-                        });
-                    }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                                }
+                            });
+                        }
+                    //}
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 

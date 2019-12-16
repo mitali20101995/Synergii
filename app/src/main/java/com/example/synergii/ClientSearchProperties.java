@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ClientSearchProperties extends Fragment implements com.example.synergii.Adapters.ClientSearchPropertiesRecyclerAdapter.OnNoteListener, AdapterView.OnItemSelectedListener {
+public class ClientSearchProperties extends Fragment implements ClientSearchPropertiesRecyclerAdapter.OnNoteListener, AdapterView.OnItemSelectedListener, SearchView.OnQueryTextListener {
 
     View v;
     LinearLayout collapseList;
@@ -50,6 +51,9 @@ public class ClientSearchProperties extends Fragment implements com.example.syne
         filterDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(filterDataAdapter);
         filterSpinner.setOnItemSelectedListener(this);
+
+        SearchView searchView = (SearchView) v.findViewById(R.id.searchByMLSClient);
+        searchView.setOnQueryTextListener(this);
 
         //Client search properties Recycleview
         clientSearchPropertiesList = (RecyclerView) v.findViewById(R.id.clientSearchPropertiesList);
@@ -192,5 +196,37 @@ public class ClientSearchProperties extends Fragment implements com.example.syne
     }
 
 
+    @Override
+        public boolean onQueryTextSubmit(String query) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query querySale = reference.child(getString(R.string.dbnode_properties))
+                .orderByChild("mls_number").equalTo(query);
+
+        querySale.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange( DataSnapshot dataSnapshot) {
+                ArrayList<Property> properties = new ArrayList<>();
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: query method found property sale: "
+                            + singleSnapshot.getValue(Property.class).toString());
+                    Property property = singleSnapshot.getValue(Property.class);
+                    property.setId(singleSnapshot.getKey());
+                    properties.add(property);
+                }
+                clientSearchPropertiesList.setAdapter(new ClientSearchPropertiesRecyclerAdapter(properties,sharedPreferences,ClientSearchProperties.this::onNoteClick));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
 }
 

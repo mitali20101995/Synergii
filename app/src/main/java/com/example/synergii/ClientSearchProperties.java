@@ -38,6 +38,7 @@ public class ClientSearchProperties extends Fragment implements com.example.syne
     public static final String TAG = "ClientSearchProperty";
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
     private SharedPreferences sharedPreferences;
+    private  RecyclerView clientSearchPropertiesList;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,35 +51,9 @@ public class ClientSearchProperties extends Fragment implements com.example.syne
         filterSpinner.setAdapter(filterDataAdapter);
         filterSpinner.setOnItemSelectedListener(this);
 
-        Spinner areaSpinner = v.findViewById((R.id.areaSpinner));
-        ArrayAdapter<CharSequence> areaDataAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.Filter, android.R.layout.simple_spinner_item);
-        areaDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        areaSpinner.setAdapter(areaDataAdapter);
-        areaSpinner.setOnItemSelectedListener(this);
-
-        Spinner municipalitySpinner = v.findViewById((R.id.municipalitySpinner));
-        ArrayAdapter<CharSequence> municipalityDataAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.Filter, android.R.layout.simple_spinner_item);
-        municipalityDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        municipalitySpinner.setAdapter(municipalityDataAdapter);
-        municipalitySpinner.setOnItemSelectedListener(this);
-
-        Spinner lowerPriceSpinner = v.findViewById((R.id.lowerPriceSpinner));
-        ArrayAdapter<CharSequence> lowerPriceDataAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.Filter, android.R.layout.simple_spinner_item);
-        lowerPriceDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        lowerPriceSpinner.setAdapter(lowerPriceDataAdapter);
-        lowerPriceSpinner.setOnItemSelectedListener(this);
-
-        Spinner upperPriceSpinner = v.findViewById((R.id.upperPriceSpinner));
-        ArrayAdapter<CharSequence> upperPriceDataAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.Filter, android.R.layout.simple_spinner_item);
-        upperPriceDataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        upperPriceSpinner.setAdapter(upperPriceDataAdapter);
-        upperPriceSpinner.setOnItemSelectedListener(this);
-
         //Client search properties Recycleview
-        RecyclerView clientSearchPropertiesList = (RecyclerView) v.findViewById(R.id.clientSearchPropertiesList);
+        clientSearchPropertiesList = (RecyclerView) v.findViewById(R.id.clientSearchPropertiesList);
         clientSearchPropertiesList.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-
 
         Query query = reference.child(getString(R.string.dbnode_properties));
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -101,8 +76,6 @@ public class ClientSearchProperties extends Fragment implements com.example.syne
             }
 
         });
-        //clientSearchPropertiesList.setAdapter(new ClientSearchPropertiesRecyclerAdapter(data, this));
-
         collapseList = (LinearLayout) v.findViewById(R.id.collapseList);
         collapseList.setVisibility(View.GONE);
 
@@ -138,17 +111,68 @@ public class ClientSearchProperties extends Fragment implements com.example.syne
 
 
     @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (parent.getItemAtPosition(position).equals("Filter"))
-        {
+    public void onItemSelected (AdapterView < ? > parent, View view,int position, long id){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        if (parent.getItemAtPosition(position).equals("Filter")) {
             //do nothing
+            Log.d(TAG, "Filter is selected. ");
         }
-        else
-        {
-            //on selecting a spinner item
-            String item = parent.getItemAtPosition(position).toString();
+        else if (parent.getItemAtPosition(position).equals("Sale")){
+            //on selecting a spinner item Sale
+            Log.d(TAG, "Filter Sale is selected. ");
+            Query querySale = reference.child(getString(R.string.dbnode_properties))
+                    .orderByChild("transaction_type")
+                    .equalTo("sale");
+            querySale.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange( DataSnapshot dataSnapshot) {
+                    ArrayList<Property> properties = new ArrayList<>();
+                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                        Log.d(TAG, "onDataChange: query method found property sale: "
+                                + singleSnapshot.getValue(Property.class).toString());
+                        Property property = singleSnapshot.getValue(Property.class);
+                        property.setId(singleSnapshot.getKey());
+                        properties.add(property);
+                    }
+                    clientSearchPropertiesList.setAdapter(new ClientSearchPropertiesRecyclerAdapter(properties,sharedPreferences,ClientSearchProperties.this::onNoteClick));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
         }
+        else {
+            //on selecting a spinner item Lease
+            Log.d(TAG, "Filter Lease is selected. ");
+            Query queryLease = reference.child(getString(R.string.dbnode_properties))
+                    .orderByChild("transaction_type")
+                    .equalTo("lease");
+            queryLease.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange( DataSnapshot dataSnapshot) {
+                    ArrayList<Property> properties = new ArrayList<>();
+                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                        Log.d(TAG, "onDataChange: query method found property lease: "
+                                + singleSnapshot.getValue(Property.class).toString());
+                        Property property = singleSnapshot.getValue(Property.class);
+                        property.setId(singleSnapshot.getKey());
+                        properties.add(property);
+                    }
+                    clientSearchPropertiesList.setAdapter(new ClientSearchPropertiesRecyclerAdapter(properties,sharedPreferences,ClientSearchProperties.this::onNoteClick));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
     }
+
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {

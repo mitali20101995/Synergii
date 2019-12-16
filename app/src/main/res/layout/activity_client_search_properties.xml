@@ -110,25 +110,25 @@
                 android:layout_height="wrap_content"
                 android:queryHint="Search by MLS Number" />
 
-            <Spinner
-                android:id="@+id/areaSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <Spinner-->
+<!--                android:id="@+id/areaSpinner"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
-            <Spinner
-                android:id="@+id/municipalitySpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <Spinner-->
+<!--                android:id="@+id/municipalitySpinner"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
-            <Spinner
-                android:id="@+id/lowerPriceSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <Spinner-->
+<!--                android:id="@+id/lowerPriceSpinner"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
-            <Spinner
-                android:id="@+id/upperPriceSpinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<!--            <Spinner-->
+<!--                android:id="@+id/upperPriceSpinner"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content" />-->
 
             <Button
                 android:id="@+id/filterResultBtn"

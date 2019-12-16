@@ -10,10 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.synergii.AgentHomeActivity;
 import com.example.synergii.R;
 import com.example.synergii.models.Client;
@@ -26,7 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -133,7 +130,6 @@ public class AgentSearchPropertiesRecyclerAdapter extends RecyclerView.Adapter<A
             addToWorkspaceBtn = (Button) itemView.findViewById(R.id.addToWorkspaceBtn);
             propDetailsTextView = (TextView) itemView.findViewById(R.id.propDetailsTextView);
             saleOrLease = (TextView) itemView.findViewById(R.id.saleOrLeaseLabel);
-
 
 
             this.onNoteListener = onNoteListener;

@@ -15,9 +15,6 @@ public class AgentHomeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-//                    case R.id.nav_workspace:
-//                        initAgentHomeFragment();
-//                        return true;
                     case R.id.nav_chat:
                         initChatFragment();
                         return true;
@@ -38,15 +35,7 @@ public class AgentHomeActivity extends AppCompatActivity {
             setContentView(R.layout.activity_agent_home);
             BottomNavigationView navView = findViewById(R.id.nav_view);
             navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-           // initAgentHomeFragment();
             initChatFragment();
-        }
-
-        private void initAgentHomeFragment(){
-            WorkSpaceFragment homeFragment = new WorkSpaceFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.main_content_frame, homeFragment, "WorkSpace");
-            transaction.commit();
         }
 
         private void initPropertiesFragment(){

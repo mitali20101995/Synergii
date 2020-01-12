@@ -13,5 +13,6 @@
     <color name="colorGreen">#7ed957</color>
     <color name="colorLightBlue">#38b6ff</color>
     <color name="colorDesertBlack">#160e0c</color>
+    <color name="colorWhite">#ffffff</color>
 
 </resources>

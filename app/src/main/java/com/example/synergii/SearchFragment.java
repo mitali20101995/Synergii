@@ -45,7 +45,6 @@ public class SearchFragment extends Fragment implements AgentSearchPropertiesRec
     private Button filterResultBtn;
     private RecyclerView agentSearchPropertiesList;
     private  Spinner filterSpinner;
-
     private SharedPreferences sharedPreferences;
 
     @Override

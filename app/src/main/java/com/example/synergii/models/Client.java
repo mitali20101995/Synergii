@@ -24,8 +24,9 @@ public class Client implements Parcelable {
     private String clientPassword;
     private String email;
     private String listingId;
+    private String profilePhoto;
 
-    public Client(String id, ArrayList<String> properties, String assignedAgent, String[] notifications, String firstName, String lastName, String phone, String clientPassword, String email, String listingId) {
+    public Client(String id, ArrayList<String> properties, String assignedAgent, String[] notifications, String firstName, String lastName, String phone, String clientPassword, String email, String listingId, String profilePhoto) {
         this.id = id;
         this.properties = properties;
         this.assignedAgent = assignedAgent;
@@ -36,8 +37,8 @@ public class Client implements Parcelable {
         this.clientPassword = clientPassword;
         this.email = email;
         this.listingId = listingId;
+        this.profilePhoto = profilePhoto;
     }
-
 
     public String getClientPassword() {
         return clientPassword;
@@ -107,6 +108,13 @@ public class Client implements Parcelable {
         this.phone = phone;
     }
 
+    public String getProfilePhoto() {
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
 
     public Client() {
     }
@@ -152,6 +160,7 @@ public class Client implements Parcelable {
                 ", notifications=" + Arrays.toString(notifications) +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", profilePhoto='" + profilePhoto + '\'' +
                 ", phone='" + phone + '\'' +
                 ", clientPassword='" + clientPassword + '\'' +
                 ", email='" + email + '\'' +
@@ -165,6 +174,7 @@ public class Client implements Parcelable {
         email = in.readString();
         listingId = in.readString();
         clientPassword = in.readString();
+        profilePhoto = in.readString();
         phone = in.readString();
         assignedAgent = in.readParcelable(Client.class.getClassLoader());
         properties = in.readArrayList(String.class.getClassLoader());
@@ -183,6 +193,7 @@ public class Client implements Parcelable {
         dest.writeString(id);
         dest.writeString(assignedAgent);
         dest.writeString(phone);
+        dest.writeString(profilePhoto);
         dest.writeString(clientPassword);
         dest.writeString(properties.toString());
     }

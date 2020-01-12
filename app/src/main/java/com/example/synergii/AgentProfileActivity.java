@@ -171,8 +171,6 @@ public class AgentProfileActivity extends AppCompatActivity
 
     private Task<Uri> uploadImageTask(Uri imguri){
         StorageReference imageRef = mStorageRef.child(System.currentTimeMillis()+"."+ getExtenstion(imguri));
-//        Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
-//        StorageReference riversRef = storageRef.child("images/rivers.jpg");
 
         uploadTask = imageRef.putFile(imguri);
 
@@ -440,80 +438,6 @@ public class AgentProfileActivity extends AppCompatActivity
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
-                });
-    }
-    private void editUserEmail(View v){
-
-        showDialog();
-
-        AuthCredential credential = EmailAuthProvider
-                .getCredential(FirebaseAuth.getInstance().getCurrentUser().getEmail(), mCurrentPassword.getText().toString());
-        Log.d(TAG, "editUserEmail: reauthenticating with:  \n email " + FirebaseAuth.getInstance().getCurrentUser().getEmail()
-                + " \n passowrd: " + mCurrentPassword.getText().toString());
-
-
-        FirebaseAuth.getInstance().getCurrentUser().reauthenticate(credential)
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        Log.d(TAG, "onComplete: reauthenticate success.");
-
-                        //make sure the domain is valid
-                        if(isValidDomain(mEmail.getText().toString())){
-
-                            FirebaseAuth.getInstance().fetchSignInMethodsForEmail(mEmail.getText().toString()).addOnCompleteListener(
-                                    task1 -> {
-
-                                        if(task1.isSuccessful()){
-
-                                            Log.d(TAG, "onComplete: RESULT: " + task1.getResult().getSignInMethods().size());
-                                            if(task1.getResult().getSignInMethods().size() == 1){
-                                                Log.d(TAG, "onComplete: That email is already in use.");
-                                                hideDialog();
-                                                Toast.makeText(v.getContext(), "That email is already in use", Toast.LENGTH_SHORT).show();
-
-                                            }else{
-                                                Log.d(TAG, "onComplete: That email is available.");
-
-                                                //add new email
-                                                FirebaseAuth.getInstance().getCurrentUser().updateEmail(mEmail.getText().toString())
-                                                        .addOnCompleteListener(task11 -> {
-                                                            if (task11.isSuccessful()) {
-                                                                Log.d(TAG, "onComplete: User email address updated.");
-                                                                Toast.makeText(v.getContext(), "Updated email", Toast.LENGTH_SHORT).show();
-                                                                sendVerificationEmail(v);
-                                                                FirebaseAuth.getInstance().signOut();
-                                                            } else {
-                                                                Log.d(TAG, "onComplete: Could not update email.");
-                                                                Toast.makeText(v.getContext(), "unable to update email", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                            hideDialog();
-                                                        })
-                                                        .addOnFailureListener(e -> {
-                                                            hideDialog();
-                                                            Toast.makeText(v.getContext(), "unable to update email", Toast.LENGTH_SHORT).show();
-                                                        });
-                                            }
-
-                                        }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        hideDialog();
-                                        Toast.makeText(v.getContext(), "unable to update email", Toast.LENGTH_SHORT).show();
-                                    });
-                        }else{
-                            Toast.makeText(v.getContext(), "you must use a company email", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }else{
-                        Log.d(TAG, "onComplete: Incorrect Password");
-                        Toast.makeText(v.getContext(), "Incorrect Password", Toast.LENGTH_SHORT).show();
-                        hideDialog();
-                    }
-
-                })
-                .addOnFailureListener(e -> {
-                    hideDialog();
-                    Toast.makeText(v.getContext(), "“unable to update email”", Toast.LENGTH_SHORT).show();
                 });
     }
     public void sendVerificationEmail(View v) {

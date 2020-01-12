@@ -75,6 +75,7 @@
         android:layout_marginTop="8dp"
         android:padding="5dp"
         android:text="Reset Filter"
+        android:background="@color/colorPrimary"
         android:textColor="@color/colorTextBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.907"
@@ -111,25 +112,7 @@
                 android:layout_height="wrap_content"
                 android:queryHint="Search by MLS Number" />
 
-<!--            <Spinner-->
-<!--                android:id="@+id/areaSpinner"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content" />-->
 
-<!--            <Spinner-->
-<!--                android:id="@+id/municipalitySpinner"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content" />-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/lowerPriceSpinner"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content" />-->
-
-<!--            <Spinner-->
-<!--                android:id="@+id/upperPriceSpinner"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content" />-->
 
             <Button
                 android:id="@+id/filterResultBtn"
@@ -137,6 +120,7 @@
                 android:layout_height="34dp"
                 android:layout_gravity="right"
                 android:padding="5dp"
+                android:background="@color/colorPrimary"
                 android:text="Filter Result"
                 android:textColor="@color/colorTextBtn" />
 

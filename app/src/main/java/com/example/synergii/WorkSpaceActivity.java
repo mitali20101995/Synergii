@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.synergii.Adapters.RecyclerAdapter;
@@ -36,25 +37,25 @@ import java.util.ArrayList;
 
 public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdapter.OnNoteListener {
     public static final String TAG = "WorkSpaceActivity";
-
     private RecyclerView clientsList;
     private TextView bName ;
     private TextView aInfo;
-
+    private ImageView agentImage;
+    private  ImageView bImage;
     private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_work_space);
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
         sharedPreferences = getSharedPreferences("com.example.synergii", Context.MODE_PRIVATE);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         //Agent Profile info
         bName = findViewById(R.id.brokerageTextView);
         aInfo = findViewById(R.id.agentInfoTextView);
+        agentImage = findViewById(R.id.agentProfilePic);
+        bImage = findViewById(R.id.brokerageLogo);
         String currentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Query brokerage_query=reference.child(getString(R.string.dbnode_users))
                 .orderByKey()
@@ -69,6 +70,7 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
                         User user = singleSnapshot.getValue(User.class);
                         bName.setText(user.getBrokerageName());
                         aInfo.setText(user.getFirstName() + " " + user.getLastName());
+
                     }
                 }
                 @Override

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class ClientMyPropertiesRecyclerAdapter extends RecyclerView.Adapter<ClientMyPropertiesRecyclerAdapter.RecyclerViewHolder> {
     private ArrayList<Property> data;
     private ClientMyPropertiesRecyclerAdapter.OnNoteListener onNoteListener;
-   // private SharedPreferences sharedPreferences;
    public static final String TAG = "ClientMyProRecycle";
 
     public ClientMyPropertiesRecyclerAdapter(ArrayList<Property> data, ClientMyPropertiesRecyclerAdapter.OnNoteListener onNoteListener){
@@ -51,7 +50,6 @@ public class ClientMyPropertiesRecyclerAdapter extends RecyclerView.Adapter<Clie
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imgIcon;
-        ImageView favStarIcon;
         TextView propDetailsTextView;
         TextView saleOrLease;
         ClientMyPropertiesRecyclerAdapter.OnNoteListener onNoteListener;
@@ -59,7 +57,6 @@ public class ClientMyPropertiesRecyclerAdapter extends RecyclerView.Adapter<Clie
         public RecyclerViewHolder(View itemView, ClientMyPropertiesRecyclerAdapter.OnNoteListener onNoteListener) {
             super(itemView);
             imgIcon = (ImageView) itemView.findViewById(R.id.imgIcon);
-            //favStarIcon = (ImageView) itemView.findViewById(R.id.favStarIcon);
             saleOrLease = (TextView) itemView.findViewById(R.id.saleOrLeaseClientMyPro);
             propDetailsTextView = (TextView) itemView.findViewById(R.id.propDetailsTextViewClientMyPro);
             this.onNoteListener = onNoteListener;

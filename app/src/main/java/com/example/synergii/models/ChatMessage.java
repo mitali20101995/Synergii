@@ -2,61 +2,50 @@ package com.example.synergii.models;
 
 public class ChatMessage
 {
-    private String[] message;
-    private User userId;
-    private String timestamp;
-    private User profilePhoto;
-    private String name;
+    private String message;
+    private Long timestamp;
+    private  String sentBy;
+    private String receivedBy;
 
-    public ChatMessage(String[] message, User userId, String timestamp, User profilePhoto, String name) {
+    public ChatMessage(String message, Long timestamp, String sentBy, String receivedBy) {
         this.message = message;
-        this.userId = userId;
-        this.timestamp = timestamp;
-        this.profilePhoto = profilePhoto;
-        this.name = name;
+        this.timestamp = timestamp; //new Date().getTime();
+        this.sentBy = sentBy;
+        this.receivedBy = receivedBy;
     }
 
     public ChatMessage(){
-
-}
-
-    public String[] getMessage() {
+    }
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(String[] message) {
+    public void setMessage(String message) {
         this.message = message;
     }
 
-    public User getUserId() {
-        return userId;
+    public String getSentBy() {
+        return sentBy;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setSentBy(String sentBy) {
+        this.sentBy = sentBy;
     }
 
-    public String getTimestamp() {
+    public String getReceivedBy() {
+        return receivedBy;
+    }
+
+    public void setReceivedBy(String receivedBy) {
+        this.receivedBy = receivedBy;
+    }
+
+
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public User getProfilePhoto() {
-        return profilePhoto;
-    }
-
-    public void setProfilePhoto(User profilePhoto) {
-        this.profilePhoto = profilePhoto;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

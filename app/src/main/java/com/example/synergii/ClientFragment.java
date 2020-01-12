@@ -1,11 +1,14 @@
 package com.example.synergii;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -15,13 +18,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.synergii.models.Client;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -34,6 +39,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
+import static android.app.Activity.RESULT_OK;
 
 public class ClientFragment extends Fragment {
     private static final String TAG = "ClientProfileFragment";
@@ -41,17 +53,17 @@ public class ClientFragment extends Fragment {
     private static final String DOMAIN_NAME = "gmail.com";
     private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText mEmail, mCurrentPassword, mFName, mLName;
-    private Button mSave;
+    private ImageView mProfileImage;
+    private Button mSave, mEditImage;
     private TextView mPhone;
     private ProgressBar mProgressBar;
     private TextView mResetPasswordLink;
     private DatabaseReference mDatabase;
     private boolean mStoragePermissions;
-    //private Uri mSelectedImageUri;
-    //private Bitmap mSelectedImageBitmap;
-    private byte[] mBytes;
-    private double progress;
     public static boolean isActivityRunning;
+    private StorageTask uploadTask;
+    Client loggedInUser;
+    private StorageReference mStorageRef;
 
 
     @Override
@@ -63,43 +75,98 @@ public class ClientFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mEmail = view.findViewById(R.id.editTextEmail);
         mSave = view.findViewById(R.id.updateProfileBtn);
-        //mProgressBar = view.findViewById(R.id.progressBarClientProfile);
-        mResetPasswordLink = view.findViewById(R.id.textViewChangePassHead);
+        mProgressBar = view.findViewById(R.id.progressBarClientProfile);
+        mResetPasswordLink = view.findViewById(R.id.textViewChangePasswordLink);
         mFName = view.findViewById(R.id.editTextFName);
         mLName = view.findViewById(R.id.editTextLName);
+        mEditImage = view.findViewById(R.id.editImageBtn);
         mPhone = view.findViewById(R.id.editTextPhNumber);
+        mProfileImage = view.findViewById(R.id.clientProfilePicForm);
+        mStorageRef = FirebaseStorage.getInstance().getReference("images");
+
         verifyStoragePermissions();
         setCurrentEmail();
         init();
+
+        //update profile pic
+        mEditImage.setOnClickListener(v -> {
+            if (uploadTask != null && uploadTask.isInProgress())
+            {
+                Toast.makeText(getContext(),"Upload in progress.",Toast.LENGTH_LONG).show();
+            }
+            else {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(intent, 1);
+            }
+
+        });
         return view;
     }
+
+    private Task<Uri> uploadImageTask(Uri imguri){
+        StorageReference imageRef = mStorageRef.child(System.currentTimeMillis()+"."+ getExtenstion(imguri));
+
+        uploadTask = imageRef.putFile(imguri);
+
+        return uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return imageRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getContext(),"Image uploaded successfully.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+        });
+    }
+
+    private String getExtenstion(Uri uri){
+        ContentResolver cr = getContext().getContentResolver();
+        MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+        return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if(requestCode == 1 && resultCode == RESULT_OK && intent != null && intent.getData() != null ){
+            Uri imguri = intent.getData();
+
+            uploadImageTask(imguri).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+
+
+                    loggedInUser.setProfilePhoto(task.getResult().toString());
+                    Picasso.with(getContext()).load(task.getResult()).resize(mProfileImage.getWidth(), mProfileImage.getHeight()).centerCrop().into(mProfileImage);
+
+                }
+            });
+        }
+    }
     private void init(){
-
         getUserAccountData();
-
         mSave.setOnClickListener(v -> {
             Log.d(TAG, "onClick: attempting to save settings.");
-
-
-            //see if they changed the email
-//            if (!mEmail.getText( ).toString().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
-//                //make sure email an current password fields are filled
-//                if (!isEmpty(mEmail.getText().toString())
-//                        && !isEmpty(mCurrentPassword.getText().toString())) {
-//
-//                }
-//                //verify that user is changing to a company email address
-//                if (isValidDomain(mEmail.getText().toString())) {
-//                    editUserEmail(v);
-//                } else {
-//                    Toast.makeText(v.getContext(), "Invalid Domain", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            } else {
-//                Toast.makeText(v.getContext(), "Email and Current Password Fields Must be Filled to Save", Toast.LENGTH_SHORT).show();
-//            }
-
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+            reference.child(getString(R.string.dbnode_clients))
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(getString(R.string.field_client_profile_photo))
+                    .setValue(loggedInUser.getProfilePhoto());
 
             //Change first name
             if(!mFName.getText().toString().equals("")){
@@ -162,12 +229,8 @@ public class ClientFragment extends Fragment {
     }
     private void getUserAccountData(){
         Log.d(TAG, "getUserAccountData: getting the user's account information");
-
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
-        /*
-            ---------- QUERY Method 1 ----------
-         */
         Query query1 = reference.child(getString(R.string.dbnode_clients))
                 .orderByKey()
                 .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -177,15 +240,16 @@ public class ClientFragment extends Fragment {
 
                 //this loop will return a single result
                 for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
-                    Log.d(TAG, "onDataChange: (QUERY METHOD 1) found user: "
+                    Log.d(TAG, "onDataChange: (QUERY METHOD 1) found client: "
                             + singleSnapshot.getValue(Client.class).toString());
-                    Client client = singleSnapshot.getValue(Client.class);
+                    loggedInUser = singleSnapshot.getValue(Client.class);
+                    mFName.setText(loggedInUser.getFirstName());
+                    mLName.setText(loggedInUser.getLastName());
+                    mPhone.setText(loggedInUser.getPhone());
+                    if(loggedInUser.getProfilePhoto() != null){
+                        Picasso.with(getContext()).load(Uri.parse(loggedInUser.getProfilePhoto())).resize(mProfileImage.getWidth(), mProfileImage.getHeight()).centerCrop().into(mProfileImage);
+                    }
 
-                    mFName.setText(client.getFirstName());
-                    mLName.setText(client.getLastName());
-                    mPhone.setText(client.getPhone());
-
-                    //ImageLoader.getInstance().displayImage(client.getProfile_image(), mProfileImage);
                 }
             }
 
@@ -195,10 +259,6 @@ public class ClientFragment extends Fragment {
             }
         });
 
-
-        /*
-            ---------- QUERY Method 2 ----------
-         */
         Query query2 = reference.child(getString(R.string.dbnode_clients))
                 .orderByChild(getString(R.string.field_client_id))
                 .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -261,99 +321,7 @@ public class ClientFragment extends Fragment {
                     }
                 });
     }
-    private void editUserEmail(View v){
 
-        showDialog();
-
-        AuthCredential credential = EmailAuthProvider
-                .getCredential(FirebaseAuth.getInstance().getCurrentUser().getEmail(), mCurrentPassword.getText().toString());
-        Log.d(TAG, "editUserEmail: reauthenticating with:  \n email " + FirebaseAuth.getInstance().getCurrentUser().getEmail()
-                + " \n passowrd: " + mCurrentPassword.getText().toString());
-
-
-        FirebaseAuth.getInstance().getCurrentUser().reauthenticate(credential)
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        Log.d(TAG, "onComplete: reauthenticate success.");
-
-                        //make sure the domain is valid
-                        if(isValidDomain(mEmail.getText().toString())){
-
-                            FirebaseAuth.getInstance().fetchSignInMethodsForEmail(mEmail.getText().toString()).addOnCompleteListener(
-                                    task1 -> {
-
-                                        if(task1.isSuccessful()){
-
-                                            Log.d(TAG, "onComplete: RESULT: " + task1.getResult().getSignInMethods().size());
-                                            if(task1.getResult().getSignInMethods().size() == 1){
-                                                Log.d(TAG, "onComplete: That email is already in use.");
-                                                hideDialog();
-                                                Toast.makeText(v.getContext(), "That email is already in use", Toast.LENGTH_SHORT).show();
-
-                                            }else{
-                                                Log.d(TAG, "onComplete: That email is available.");
-
-                                                //add new email
-                                                FirebaseAuth.getInstance().getCurrentUser().updateEmail(mEmail.getText().toString())
-                                                        .addOnCompleteListener(task11 -> {
-                                                            if (task11.isSuccessful()) {
-                                                                Log.d(TAG, "onComplete: User email address updated.");
-                                                                Toast.makeText(v.getContext(), "Updated email", Toast.LENGTH_SHORT).show();
-                                                                sendVerificationEmail(v);
-                                                                FirebaseAuth.getInstance().signOut();
-                                                            } else {
-                                                                Log.d(TAG, "onComplete: Could not update email.");
-                                                                Toast.makeText(v.getContext(), "unable to update email", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                            hideDialog();
-                                                        })
-                                                        .addOnFailureListener(e -> {
-                                                            hideDialog();
-                                                            Toast.makeText(v.getContext(), "unable to update email", Toast.LENGTH_SHORT).show();
-                                                        });
-                                            }
-
-                                        }
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        hideDialog();
-                                        Toast.makeText(v.getContext(), "unable to update email", Toast.LENGTH_SHORT).show();
-                                    });
-                        }else{
-                            Toast.makeText(v.getContext(), "you must use a company email", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }else{
-                        Log.d(TAG, "onComplete: Incorrect Password");
-                        Toast.makeText(v.getContext(), "Incorrect Password", Toast.LENGTH_SHORT).show();
-                        hideDialog();
-                    }
-
-                })
-                .addOnFailureListener(e -> {
-                    hideDialog();
-                    Toast.makeText(v.getContext(), "“unable to update email”", Toast.LENGTH_SHORT).show();
-                });
-    }
-    public void sendVerificationEmail(View v) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user != null) {
-            user.sendEmailVerification()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(v.getContext(), "Sent Verification Email", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(v.getContext(), "Couldn't Verification Send Email", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
-
-    }
     private void showDialog(){
         mProgressBar.setVisibility(View.VISIBLE);
 

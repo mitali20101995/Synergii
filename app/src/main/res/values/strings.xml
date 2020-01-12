@@ -19,6 +19,7 @@
     <string name="dbnode_users">users</string>
     <string name="dbnode_clients">clients</string>
     <string name="dbnode_properties">properties</string>
+    <string name="dbnode_chat">chatMessage</string>
     <string name="reset_password">Reset Password</string>
     <string name="confirm">CONFIRM</string>
     <string name="email">Email</string>
@@ -37,10 +38,11 @@
     <string name="field_profile_image">profileImage</string>
     <string name="field_client_properties">properties</string>
     <string name="field_profile_photo">profilePhoto</string>
+    <string name="field_client_profile_photo">profilePhotoClient</string>
     <string name="field_profile_logo">profileLogo</string>
-
-
-
+    <string name="field_msg">message</string>
+    <string name="field_sentBy">sentBy</string>
+    <string name="field_receivedBy">receivedBy</string>
 
     <string name="title_activity_agent_home">AgentHomeActivity</string>
     <string name="title_home">Home</string>

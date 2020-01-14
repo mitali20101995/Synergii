@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class ChatFragment extends Fragment implements ChatAdapterAgent.OnNoteListener{
     public static final String TAG = "ChatFragment";
@@ -88,22 +89,30 @@ public class ChatFragment extends Fragment implements ChatAdapterAgent.OnNoteLis
             }
         });
 
-       showChat(selectedClient);
+        showChat(selectedClient);
         return v;
     }
 
     public void showChat(Client selectedClient)
     {
-        Query query = reference.child(getString(R.string.dbnode_chat)).orderByChild("receivedBy").equalTo(selectedClient.getId());
+        Query query = reference.child(getString(R.string.dbnode_chat));
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange( DataSnapshot dataSnapshot) {
                 ArrayList<ChatMessage> chats = new ArrayList<>();
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "onDataChange: query method found chat: "
+                    Log.d(TAG, "onDataChange: query method found sent msg : "
                             + singleSnapshot.getValue(ChatMessage.class).toString());
                     ChatMessage msg= singleSnapshot.getValue(ChatMessage.class);
-                    chats.add(msg);
+                    if(Objects.equals(msg.getReceivedBy(),selectedClient.getId()))
+                    {
+                        chats.add(msg);
+                    }
+                    else if(Objects.equals(msg.getSentBy(),selectedClient.getId()))
+                    {
+                        chats.add(msg);
+                    }
+
                 }
                 chatList.setAdapter(new ChatAdapterAgent(chats,ChatFragment.this::onNoteClick));
             }

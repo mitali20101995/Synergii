@@ -176,8 +176,6 @@ public class ClientSearchProperties extends Fragment implements ClientSearchProp
         }
 
     }
-
-
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 

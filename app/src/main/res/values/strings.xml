@@ -42,6 +42,7 @@
     <string name="field_profile_logo">profileLogo</string>
     <string name="field_msg">message</string>
     <string name="field_sentBy">sentBy</string>
+    <string name="field_assigned_agent">assignedAgent</string>
     <string name="field_receivedBy">receivedBy</string>
 
     <string name="title_activity_agent_home">AgentHomeActivity</string>

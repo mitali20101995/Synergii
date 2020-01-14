@@ -10,7 +10,6 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,7 +44,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,14 +67,8 @@ public class AgentProfileActivity extends AppCompatActivity
     private boolean mStoragePermissions;
     private StorageReference mStorageRef;
     private StorageTask uploadTask;
-    private Uri mSelectedImageUri;
-    private Bitmap mSelectedImageBitmap;
-    //private  mProfileImage
-    private byte[] mBytes;
-    private double progress;
     public static boolean isActivityRunning;
     private ImageViewType selectedImgViewType;
-
     User loggedInUser;
 
     private enum ImageViewType {

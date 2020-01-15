@@ -7,8 +7,8 @@
     tools:context=".ClientSearchProperties">
 
     <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="54dp"
+        android:id="@+id/brokerageLogo"
+        android:layout_width="57dp"
         android:layout_height="50dp"
         android:src="@drawable/brokerage"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,9 +17,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView10"
+        android:id="@+id/clientProfilePic"
         android:layout_width="57dp"
-        android:layout_height="47dp"
+        android:layout_height="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+        app:layout_constraintTop_toBottomOf="@+id/clientProfilePic" />
 
     <View
         android:id="@+id/divider7"
@@ -42,30 +42,26 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+        app:layout_constraintTop_toBottomOf="@+id/brokerageLogo" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/brokerageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Xoocca Brokerage"
-        android:textColor="@android:color/black"
         android:textSize="20dp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/imageView8"
+        app:layout_constraintStart_toEndOf="@+id/brokerageLogo"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/clientInfoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="Client Info"
-        android:textColor="@android:color/black"
-        app:layout_constraintStart_toEndOf="@+id/imageView10"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/clientProfilePic"
         app:layout_constraintTop_toTopOf="@+id/divider7" />
 
     <Button
@@ -79,14 +75,14 @@
         android:textColor="@color/colorTextBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.907"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintStart_toEndOf="@+id/clientInfoTextView"
         app:layout_constraintTop_toBottomOf="@+id/divider7" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginHorizontal="20dp"
+        android:orientation="vertical"
         android:layout_marginTop="100dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_client"
         app:layout_constraintEnd_toEndOf="parent"
@@ -113,14 +109,13 @@
                 android:queryHint="Search by MLS Number" />
 
 
-
             <Button
                 android:id="@+id/filterResultBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="34dp"
                 android:layout_gravity="right"
-                android:padding="5dp"
                 android:background="@color/colorPrimary"
+                android:padding="5dp"
                 android:text="Filter Result"
                 android:textColor="@color/colorTextBtn" />
 
@@ -130,8 +125,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/clientSearchPropertiesList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

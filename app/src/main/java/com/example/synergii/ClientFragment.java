@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import android.util.Log;
@@ -56,13 +57,12 @@ public class ClientFragment extends Fragment {
     private StorageTask uploadTask;
     Client loggedInUser;
     private StorageReference mStorageRef;
-
+    View view;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_client, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        view = inflater.inflate(R.layout.fragment_client, container, false);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mEmail = view.findViewById(R.id.editTextEmail);
@@ -82,19 +82,22 @@ public class ClientFragment extends Fragment {
 
         //update profile pic
         mEditImage.setOnClickListener(v -> {
+            selectImage();
             if (uploadTask != null && uploadTask.isInProgress())
             {
-                Toast.makeText(getContext(),"Upload in progress.",Toast.LENGTH_LONG).show();
+                Toast.makeText(v.getContext(),"Upload in progress.",Toast.LENGTH_LONG).show();
             }
             else {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, 1);
             }
 
         });
         return view;
+    }
+    private void selectImage(){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, 1);
     }
 
     private Task<Uri> uploadImageTask(Uri imguri){
@@ -116,7 +119,7 @@ public class ClientFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(getContext(),"Image uploaded successfully.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(),"Image uploaded successfully.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Handle failures
                     // ...
@@ -126,25 +129,21 @@ public class ClientFragment extends Fragment {
     }
 
     private String getExtenstion(Uri uri){
-        ContentResolver cr = getContext().getContentResolver();
+        ContentResolver cr = view.getContext().getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    public void onActivityResult(int requestCode, int resultCode,@Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if(requestCode == 1 && resultCode == RESULT_OK && intent != null && intent.getData() != null ){
             Uri imguri = intent.getData();
-
             uploadImageTask(imguri).addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
-
-
-                    loggedInUser.setProfilePhoto(task.getResult().toString());
-                    Picasso.with(getContext()).load(task.getResult()).resize(mProfileImage.getWidth(), mProfileImage.getHeight()).centerCrop().into(mProfileImage);
-
+                    loggedInUser.setProfilePhotoClient(task.getResult().toString());
+                    Picasso.with(view.getContext()).load(task.getResult()).resize(mProfileImage.getWidth(), mProfileImage.getHeight()).centerCrop().into(mProfileImage);
                 }
             });
         }
@@ -156,9 +155,9 @@ public class ClientFragment extends Fragment {
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
             reference.child(getString(R.string.dbnode_clients))
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()  )
                     .child(getString(R.string.field_client_profile_photo))
-                    .setValue(loggedInUser.getProfilePhoto());
+                    .setValue(loggedInUser.getProfilePhotoClient());
 
             //Change first name
             if(!mFName.getText().toString().equals("")){
@@ -186,13 +185,27 @@ public class ClientFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: sending password reset link");
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(TAG, "onComplete: Password Reset Email sent.");
+                                        Toast.makeText(view.getContext(), "Sent Password Reset Link to Email",
+                                                Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Log.d(TAG, "onComplete: No user associated with that email.");
 
-                    //Reset Password link
-                    sendResetPasswordLink();
+                                        Toast.makeText(view.getContext(), "No User Associated with that Email.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
                 }
             });
             Toast.makeText(getContext(), "Profile updated", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getContext(),ClientHomeActivity.class);
+            Intent intent = new Intent(view.getContext(),ClientHomeActivity.class);
             startActivity(intent);
         });
 
@@ -238,8 +251,8 @@ public class ClientFragment extends Fragment {
                     mFName.setText(loggedInUser.getFirstName());
                     mLName.setText(loggedInUser.getLastName());
                     mPhone.setText(loggedInUser.getPhone());
-                    if(loggedInUser.getProfilePhoto() != null){
-                        Picasso.with(getContext()).load(Uri.parse(loggedInUser.getProfilePhoto())).resize(mProfileImage.getWidth(), mProfileImage.getHeight()).centerCrop().into(mProfileImage);
+                    if(loggedInUser.getProfilePhotoClient() != null){
+                        Picasso.with(view.getContext()).load(Uri.parse(loggedInUser.getProfilePhotoClient())).resize(mProfileImage.getWidth(), mProfileImage.getHeight()).centerCrop().into(mProfileImage);
                     }
 
                 }
@@ -294,35 +307,6 @@ public class ClientFragment extends Fragment {
 
         }
 
-    }
-    private void sendResetPasswordLink() {
-        FirebaseAuth.getInstance().sendPasswordResetEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: Password Reset Email sent.");
-                            Toast.makeText(getContext(), "Sent Password Reset Link to Email",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Log.d(TAG, "onComplete: No user associated with that email.");
-
-                            Toast.makeText(getContext(), "No User Associated with that Email.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
-    private void showDialog(){
-        mProgressBar.setVisibility(View.VISIBLE);
-
-    }
-
-    private void hideDialog(){
-        if(mProgressBar.getVisibility() == View.VISIBLE){
-            mProgressBar.setVisibility(View.INVISIBLE);
-        }
     }
 
     @Override

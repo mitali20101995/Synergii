@@ -70,7 +70,10 @@ public class AgentProfileActivity extends AppCompatActivity
     public static boolean isActivityRunning;
     private ImageViewType selectedImgViewType;
     User loggedInUser;
-
+    private TextView aInfo;
+    private TextView bName ;
+    private ImageView agentImage;
+    private  ImageView bImage;
     private enum ImageViewType {
         IMAGE,
         LOGO
@@ -94,6 +97,37 @@ public class AgentProfileActivity extends AppCompatActivity
         mSpinner = findViewById((R.id.titleSpinner));
         mProfileImage = findViewById(R.id.agentProfilePicForm);
         mProfileLogo = findViewById(R.id.brokerageLogoForm);
+        aInfo = findViewById(R.id.agentInfoTextView);
+        bName = findViewById(R.id.brokerageTextView);
+        agentImage = findViewById(R.id.agentProfilePic);
+        bImage = findViewById(R.id.brokerageLogo);
+
+        String currentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Query brokerage_query=mDatabase.child(getString(R.string.dbnode_users))
+                .orderByKey()
+                .equalTo(currentUID);
+        brokerage_query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: query method found user: "
+                            + singleSnapshot.getValue(User.class).toString());
+                    User user = singleSnapshot.getValue(User.class);
+                    bName.setText(user.getBrokerageName());
+                    aInfo.setText(user.getFirstName() + " " + user.getLastName());
+                    if(user.getProfileLogo() != null){
+                        Picasso.with(getApplicationContext()).load(Uri.parse(user.getProfileLogo())).resize(bImage.getWidth(), bImage.getHeight()).centerCrop().into(bImage);
+                    }
+                    if(user.getProfilePhoto() != null){
+                        Picasso.with(getApplicationContext()).load(Uri.parse(user.getProfilePhoto())).resize(agentImage.getWidth(), agentImage.getHeight()).centerCrop().into(agentImage);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+
+        });
 
         verifyStoragePermissions();
         setCurrentEmail();
@@ -134,10 +168,6 @@ public class AgentProfileActivity extends AppCompatActivity
             {
                 Toast.makeText(AgentProfileActivity.this,"Upload in progress.",Toast.LENGTH_LONG).show();
             }
-            else {
-                //uploadImage();
-            }
-
         });
 
         mProfileLogo.setOnClickListener(v -> {
@@ -145,9 +175,6 @@ public class AgentProfileActivity extends AppCompatActivity
             if (uploadTask != null && uploadTask.isInProgress())
             {
                 Toast.makeText(AgentProfileActivity.this,"Upload in progress.",Toast.LENGTH_LONG).show();
-            }
-            else {
-                //uploadImage();
             }
 
         });
@@ -318,20 +345,12 @@ public class AgentProfileActivity extends AppCompatActivity
             mEmail.setText(email);
         }
     }
-    private boolean isValidDomain(String email) {
-        Log.d(TAG, "isValidDomain: verifying email has correct domain: " + email);
-        String domain = email.substring(email.indexOf("@") + 1).toLowerCase();
-        Log.d(TAG, "isValidDomain: users domain: " + domain);
-        return domain.equals(DOMAIN_NAME);
-    }
+
     private void getUserAccountData(){
         Log.d(TAG, "getUserAccountData: getting the user's account information");
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
-        /*
-            ---------- QUERY Method 1 ----------
-         */
         Query query1 = reference.child(getString(R.string.dbnode_users))
                 .orderByKey()
                 .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -366,10 +385,6 @@ public class AgentProfileActivity extends AppCompatActivity
             }
         });
 
-
-        /*
-            ---------- QUERY Method 2 ----------
-         */
         Query query2 = reference.child(getString(R.string.dbnode_users))
                 .orderByChild(getString(R.string.field_user_id))
                 .equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -432,35 +447,6 @@ public class AgentProfileActivity extends AppCompatActivity
                     }
                 });
     }
-    public void sendVerificationEmail(View v) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user != null) {
-            user.sendEmailVerification()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(v.getContext(), "Sent Verification Email", Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(v.getContext(), "Couldn't Verification Send Email", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
-
-    }
-    private void showDialog(){
-        mProgressBar.setVisibility(View.VISIBLE);
-
-    }
-
-    private void hideDialog(){
-        if(mProgressBar.getVisibility() == View.VISIBLE){
-            mProgressBar.setVisibility(View.INVISIBLE);
-        }
-    }
 
     @Override
     public void onStart() {
@@ -477,7 +463,6 @@ public class AgentProfileActivity extends AppCompatActivity
         }
         isActivityRunning = false;
     }
-
 
 }
 

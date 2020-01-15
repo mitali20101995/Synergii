@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.synergii.models.Client;
+import com.example.synergii.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -21,8 +24,13 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,13 +40,14 @@ import static com.google.firebase.auth.FirebaseAuth.getInstance;
 
 public class AddClientActivity extends AppCompatActivity {
     private static final String TAG = "AddClientActivity";
-    //Firebase
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseAuth mAuth;
     private FirebaseAuth mAuth2;
-    // widgets
+    private TextView bName ;
+    private TextView aInfo;
+    private ImageView agentImage;
+    private  ImageView bImage;
     private EditText mEmail, mFName, mLName, mListingId, mClientPassword;
-    //private String mClientId;
     private ProgressBar mProgressBar;
     public static boolean isActivityRunning;
     private DatabaseReference mDatabase;
@@ -56,6 +65,38 @@ public class AddClientActivity extends AppCompatActivity {
         mListingId = findViewById(R.id.editTextListingId);
         mClientPassword = findViewById(R.id.editTextClientPassword);
         mBtnAddClient = findViewById(R.id.addClientBtn);
+
+        //Agent Profile info
+        bName = findViewById(R.id.brokerageTextView);
+        aInfo = findViewById(R.id.agentInfoTextView);
+        agentImage = findViewById(R.id.agentProfilePic);
+        bImage = findViewById(R.id.brokerageLogo);
+        String currentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Query brokerage_query=mDatabase.child(getString(R.string.dbnode_users))
+                .orderByKey()
+                .equalTo(currentUID);
+        brokerage_query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: query method found user: "
+                            + singleSnapshot.getValue(User.class).toString());
+                    User user = singleSnapshot.getValue(User.class);
+                    bName.setText(user.getBrokerageName());
+                    aInfo.setText(user.getFirstName() + " " + user.getLastName());
+                    if(user.getProfileLogo() != null){
+                        Picasso.with(getApplicationContext()).load(Uri.parse(user.getProfileLogo())).resize(bImage.getWidth(), bImage.getHeight()).centerCrop().into(bImage);
+                    }
+                    if(user.getProfilePhoto() != null){
+                        Picasso.with(getApplicationContext()).load(Uri.parse(user.getProfilePhoto())).resize(agentImage.getWidth(), agentImage.getHeight()).centerCrop().into(agentImage);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+
+        });
 
 
         FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
@@ -129,21 +170,20 @@ public class AddClientActivity extends AppCompatActivity {
                         Toast.makeText(view.getContext(), "Client added and email sent.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(AddClientActivity.this,WorkSpaceActivity.class);
 
-
-                        //Send client email
-                        String subject = "Synergii temporary Login Credentials ";
-                        String message = "You have been added as a client.\n" +
-                                "These are your login details:\n" +
-                                "Username: " + mEmail.getText().toString() +
-                                "\n Password:" + mClientPassword.getText().toString() +
-                                "\n Change password after first login.";
-                        Intent intent2 = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                                "mailto", "mEmail.getText().toString()", null));
-                        intent2.putExtra(Intent.EXTRA_SUBJECT, subject);
-                        intent2.putExtra(Intent.EXTRA_TEXT, message);
-                        intent2.putExtra(Intent.EXTRA_EMAIL, mEmail.getText().toString());
-                        startActivity(intent2);
-                        finish();
+//                        //Send client email
+//                        String subject = "Synergii temporary Login Credentials ";
+//                        String message = "You have been added as a client.\n" +
+//                                "These are your login details:\n" +
+//                                "Username: " + mEmail.getText().toString() +
+//                                "\n Password:" + mClientPassword.getText().toString() +
+//                                "\n Change password after first login.";
+//                        Intent intent2 = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+//                                "mailto", "mEmail.getText().toString()", null));
+//                        intent2.putExtra(Intent.EXTRA_SUBJECT, subject);
+//                        intent2.putExtra(Intent.EXTRA_TEXT, message);
+//                        intent2.putExtra(Intent.EXTRA_EMAIL, mEmail.getText().toString());
+//                        startActivity(intent2);
+//                        finish();
 
                         startActivity(intent);
                         finish();

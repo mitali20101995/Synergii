@@ -10,6 +10,7 @@
         android:id="@+id/FNameEditText"
         android:layout_width="345dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
         android:ems="10"
         android:hint="Enter First Name"
         android:inputType="textPersonName"
@@ -62,6 +63,7 @@
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/addClientBtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextListingId" />
 
@@ -78,9 +80,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextClientPassword" />
 
+    <TextView
+        android:id="@+id/agentInfoTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/agentProfilePic"
+        app:layout_constraintTop_toTopOf="@+id/divider2" />
+
+    <TextView
+        android:id="@+id/brokerageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/brokerageLogo"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/brokerageLogo"
-        android:layout_width="54dp"
+        android:layout_width="57dp"
         android:layout_height="50dp"
         android:src="@drawable/brokerage"
         app:layout_constraintEnd_toEndOf="parent"

@@ -24,9 +24,9 @@ public class Client implements Parcelable {
     private String clientPassword;
     private String email;
     private String listingId;
-    private String profilePhoto;
+    private String profilePhotoClient;
 
-    public Client(String id, ArrayList<String> properties, String assignedAgent, String[] notifications, String firstName, String lastName, String phone, String clientPassword, String email, String listingId, String profilePhoto) {
+    public Client(String id, ArrayList<String> properties, String assignedAgent, String[] notifications, String firstName, String lastName, String phone, String clientPassword, String email, String listingId, String profilePhotoClient) {
         this.id = id;
         this.properties = properties;
         this.assignedAgent = assignedAgent;
@@ -37,7 +37,7 @@ public class Client implements Parcelable {
         this.clientPassword = clientPassword;
         this.email = email;
         this.listingId = listingId;
-        this.profilePhoto = profilePhoto;
+        this.profilePhotoClient = profilePhotoClient;
     }
 
     public String getClientPassword() {
@@ -58,11 +58,6 @@ public class Client implements Parcelable {
 
     public void setListingId(String listingId) {
         this.listingId = listingId;
-    }
-
-    public boolean addToWorkspace(String propertyId)
-    {
-        return false;
     }
 
     public static final Creator<Client> CREATOR = new Creator<Client>() {
@@ -108,12 +103,12 @@ public class Client implements Parcelable {
         this.phone = phone;
     }
 
-    public String getProfilePhoto() {
-        return profilePhoto;
+    public String getProfilePhotoClient() {
+        return profilePhotoClient;
     }
 
-    public void setProfilePhoto(String profilePhoto) {
-        this.profilePhoto = profilePhoto;
+    public void setProfilePhotoClient(String profilePhotoClient) {
+        this.profilePhotoClient = profilePhotoClient;
     }
 
     public Client() {
@@ -160,7 +155,7 @@ public class Client implements Parcelable {
                 ", notifications=" + Arrays.toString(notifications) +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", profilePhoto='" + profilePhoto + '\'' +
+                ", profilePhotoClient='" + profilePhotoClient + '\'' +
                 ", phone='" + phone + '\'' +
                 ", clientPassword='" + clientPassword + '\'' +
                 ", email='" + email + '\'' +
@@ -174,7 +169,7 @@ public class Client implements Parcelable {
         email = in.readString();
         listingId = in.readString();
         clientPassword = in.readString();
-        profilePhoto = in.readString();
+        profilePhotoClient = in.readString();
         phone = in.readString();
         assignedAgent = in.readParcelable(Client.class.getClassLoader());
         properties = in.readArrayList(String.class.getClassLoader());
@@ -193,7 +188,7 @@ public class Client implements Parcelable {
         dest.writeString(id);
         dest.writeString(assignedAgent);
         dest.writeString(phone);
-        dest.writeString(profilePhoto);
+        dest.writeString(profilePhotoClient);
         dest.writeString(clientPassword);
         dest.writeString(properties.toString());
     }
@@ -208,6 +203,7 @@ public class Client implements Parcelable {
         result.put("assignedAgent",assignedAgent);
         result.put("clientPassword", clientPassword);
         result.put("listingId",listingId);
+        result.put("profilePhoto", profilePhotoClient);
         result.put("properties", properties);
 
         return result;

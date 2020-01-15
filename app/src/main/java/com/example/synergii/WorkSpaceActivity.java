@@ -22,6 +22,7 @@ import com.google.firebase.database.annotations.Nullable;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 
 import com.example.synergii.Adapters.RecyclerAdapter;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -70,14 +72,19 @@ public class WorkSpaceActivity extends AppCompatActivity implements RecyclerAdap
                         User user = singleSnapshot.getValue(User.class);
                         bName.setText(user.getBrokerageName());
                         aInfo.setText(user.getFirstName() + " " + user.getLastName());
-
+                        if(user.getProfileLogo() != null){
+                            Picasso.with(getApplicationContext()).load(Uri.parse(user.getProfileLogo())).resize(bImage.getWidth(), bImage.getHeight()).centerCrop().into(bImage);
+                        }
+                        if(user.getProfilePhoto() != null){
+                            Picasso.with(getApplicationContext()).load(Uri.parse(user.getProfilePhoto())).resize(agentImage.getWidth(), agentImage.getHeight()).centerCrop().into(agentImage);
+                        }
                     }
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) { }
 
             });
-    //Client list
+
         clientsList = findViewById(R.id.recyclerViewHome);
         clientsList.setLayoutManager(new LinearLayoutManager(this));
 
